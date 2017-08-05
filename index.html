@@ -1,454 +1,1861 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="ja">
-<head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>Steam コミュニティ :: ガイド :: Gold Miners L4D2 サバイバルガイド</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-language" content="ja">
-<meta http-equiv="Content-style-type" content="text/css">
-<meta http-equiv="imagetoolbar" content="no">
-<title>焼肉・寿司・デザートの食べ放題レストランすたみな太郎グループ</title>
-<link href="importTop.css" rel="stylesheet" type="text/css" media="all">
-<link rel="stylesheet" type="text/css" href="table.css" id="HPB_TABLE_CSS_ID_">
-<style type="text/css">
-</style>
+<meta name="Description" content="This guide explains in-depth the various strategies used for survival mode in Left 4 Dead 2. It was originally for the Gold Miners group, an international group of survival players. The guide includes">
+<link rel="image_src" href="http://cloud-4.steampowered.com/ugc/920127008819225140/D15CC3AA4D022B88DB2510628F233CB844824E0C/512x0.resizedimage">
+<link rel="shortcut icon" href="http://steamcommunity.com/favicon.ico" type="image/x-icon">
 
+<link href="files/buttons.css" rel="stylesheet" type="text/css">
+<link href="files/shared_global.css" rel="stylesheet" type="text/css">
+<link href="files/globalv2.css" rel="stylesheet" type="text/css">
+<link href="files/global.css" rel="stylesheet" type="text/css">
+<link href="files/apphub.css" rel="stylesheet" type="text/css">
+<link href="files/modalContent.css" rel="stylesheet" type="text/css">
+<link href="files/forums.css" rel="stylesheet" type="text/css">
+<link href="files/workshop.css" rel="stylesheet" type="text/css">
+<link href="files/workshop_itemdetails.css" rel="stylesheet" type="text/css">
+<link href="files/sharedfiles_guide.css" rel="stylesheet" type="text/css">
+<link href="files/apphub_images.css" rel="stylesheet" type="text/css">
+<link href="files/header.css" rel="stylesheet" type="text/css">
+<link href="files/global_japanese.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="files/prototype-1.js"></script>
+<script type="text/javascript" src="files/global.js"></script>
+<script type="text/javascript" src="files/jquery-1.js"></script>
+
+
+<script type="text/javascript">$J = jQuery.noConflict();
+if ( typeof JSON != 'object' || !JSON.stringify || !JSON.parse ) { document.write( "<scr" + "ipt type=\"text\/javascript\" src=\"http:\/\/steamcommunity-a.akamaihd.net\/public\/javascript\/json2.js?v=pmScf4470EZP&amp;l=japanese\"><\/script>\n" ); };
+</script>
+
+
+
+
+<script type="text/javascript" src="files/sharedfiles_guide_functions.js"></script>
+
+<!-- Floating Menu -->
+<script type="text/javascript">
+	var publishedfileid = '122543624';
+	var currentSectionID = '0';
+	var searchText = "";
+
+	addEvent( window, "scroll", CheckForVisibleYouTubeVideos, false);
+	addEvent( window, "scroll", OnScrollChangeGuideSection, false);
+
+	$J( function()
+	{
+		if ( window.parent && window.parent !== window && window.parent.OnModalContentLoaded )
+			window.parent.OnModalContentLoaded();
+
+		// fix the table of contents if the user tries to scroll past it
+		new FixedElementOnScrollWrapper( 'GuideTableOfContents', 60, true, 130 );
+
+		new FixedElementOnScrollWrapper( 'ItemControls' );
+
+		// set the current selection
+		if ( location.hash.length > 1 )
+		{
+			SelectGuideSection( location.hash.substring( 1 ), 'scrollTo' );
+		}
+		else
+		{
+			var guideSection = GetGuideSection( publishedfileid );
+			if ( guideSection != null )
+			{
+				SelectGuideSection( guideSection, 'changeHash' );
+			}
+			else
+			{
+				var firstElem = $( "guideSectionSelection_0" );
+				firstElem.addClassName( 'selected' );
+			}
+		}
+
+		CheckForVisibleYouTubeVideos();
+	} );
+
+	function GetGuideSection( publishedfileid )
+	{
+		var sections = WebStorage.GetLocal('GuideSections');
+		if( sections && sections.length > 0 )
+		{
+			for( var i=0; i<sections.length; i++)
+			{
+				var section = sections[i];
+				if( section.id == publishedfileid )
+					return section.section;
+			}
+		}
+		return null;
+	}
+
+	function SaveGuideSection( publishedfileid, strSectionName )
+	{
+		var sections = WebStorage.GetLocal('GuideSections');
+		if( sections == null )
+			sections = [];
+
+		if( sections && sections.length > 0 )
+		{
+			for( var i=0; i<sections.length; i++)
+			{
+				var section = sections[i];
+				if( section.id == publishedfileid )
+				{
+					section.section = strSectionName;
+					WebStorage.SetLocal('GuideSections', sections );
+					return;
+				}
+			}
+		}
+		// Evict an item from the object to make room
+		if( sections.length > 25 )
+			sections.shift();
+
+		sections.push({ id: publishedfileid, section: strSectionName });
+		WebStorage.SetLocal('GuideSections', sections );
+	}
+
+	function onModalHidden()
+	{
+		// stop any videos
+		if (  typeof ytplayer != 'undefined' && ytplayer  )
+		{
+			ytplayer.stopVideo();
+		}
+	}
+
+	function ToggleSectionVisibility( browseBar, elementID )
+	{
+		if ( $(elementID).visible() )
+		{
+			$(browseBar).className = "rightSectionBrowseBar";
+			$(elementID).hide();
+		}
+		else
+		{
+			$(browseBar).className = "rightSectionBrowseBar toggled";
+			$(elementID).show();
+		}
+	}
+
+	Event.observe(window, 'dom:loaded', function() {
+		if ( searchText )
+		{
+			HighlightSearchText( searchText, $('highlightContent') );
+
+			var rgSections = $$('div.subSection' );
+			for ( var i = 0; i < rgSections.length; ++i )
+			{
+				var section = rgSections[i];
+				HighlightSearchText( searchText, section );
+			}
+		}
+	});
+
+</script>
+<!-- /Floating Menu -->
 </head>
-<body id="group" style="background-image : url(group_bg.jpg);">
-<div class="groupwrap">
-  <h1 id="pagetop">焼肉や寿司、ケーキなどが食べ放題！千葉、埼玉、福岡など全国展開のバイキングレストランすたみな太郎グループ</h1>
-  <!-- ▼PAGE▼ -->
-  <div id="container" style="font-size : 18px;font-weight : 900;vertical-align : top;">
-    <!-- ▼HEADER▼ -->
-    <div id="group_header">
-      <h2 class="group"><img src="group_title.gif" alt="すたみな太郎グループ"></h2>
-      <ul id="group_headlink">
-        <li>会社案内
-        <li>お問い合わせ
-        <li>サイトマップ
-      </ul>
-	<div class="clear"><hr /></div>
-    </div>
-<TABLE border="0" cellpadding="0" cellspacing="0">
-<TR>
-<TD width="400">
-<a href="https://l4d2survival.github.io/SurvivalGuide/"><img src="files/128x128.png?dl=0" alt="" Border="0" Width="32" Height="32"><font size="2" color="tomato">&nbsp;Gold Miners L4D2 サバイバルガイド(JP)</font></a></TD>
+<body style="" class="">
+<center>
+	<!-- header bar, contains info browsing user if logged in -->
+	
+	<div id="global_header">
+		<div class="content">
 
-<TD width="0">&nbsp;</TD>
-<TD width="400">
+			<div class="logo">
+				<span id="logo_holder">
+					<a>
+						<img src="files/globalheader_logo.png" alt="Steam ロゴ" border="0" height="44" width="176">
+					</a>
+				</span>
+				<!--[if lt IE 7]>
+				<style type="text/css">
+				#logo_holder img { filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0); }
+				#logo_holder { display: inline-block; width: 176px; height: 44px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://steamcommunity-a.akamaihd.net/public/images/header/globalheader_logo.png'); }
+				</style>
+				<![endif]-->
+			</div>
 
-<a href="http://steamcommunity.com/sharedfiles/filedetails/?id=122543624"><img src="files/128x128.png" alt="" Border="0" Width="32" Height="32"><font size="2" color="tomato">&nbsp;Gold Miners L4D2 Survival Guide(EN)</font></a>
-</TD>
-</TR>
-</TABLE><font size=2>https://l4d2survival.github.io/SurvivalGuide/</font>
-<br>
-    <!-- ▲HEADER▲ --><!-- ▼GLOBAL MENU▼ -->
-    <ul id="group_gnavi">
-      <li id="group_gnavi_li01"><img src="group_gnavi01.gif" id="group_gnavi01" alt="お店の紹介">
-      <li id="group_gnavi_li02"><img src="group_gnavi02.gif" id="group_gnavi02" alt="お得情報">
-      <li id="group_gnavi_li03"><img src="group_gnavi03.gif" id="group_gnavi03" alt="メニュー">
-      <li id="group_gnavi_li04"><img src="group_gnavi04.gif" id="group_gnavi04" alt="店舗検索">
-      <div class="clear"></div>
-    </ul>
-    <!-- ▲GLOBAL MENU▲ --><!-- ▼PANKUZU LIST▼ -->
-    <div id="group_pankuzu">すたみな太郎グループ</div>
-    <!-- ▲PANKUZU LIST▲ --><!-- ▼TOPIMG▼ -->
-
-<!-- ハロウィンメニュー -->
-<img src="Halloween.jpg" alt="banner" border="0" id="topbnr27" width="796" height="394">
-<!-- ハロウィンメニュー -->
-
-    <!-- ▲TOPIMG▲ --><!-- ▼CONTENTS▼ --><!-- ▼LEFT CONTENTS▼ --><!-- ▼NEWS▼ --><img src="group_topbnr27.jpg" alt="banner" border="0" id="topbnr27" width="196" height="196"> <img src="group_topbnr24.jpg" alt="banner" border="0" id="topbnr24" width="196" height="196"> <img src="group_topbnr26.jpg" width="196" height="196" border="0"><img src="group_topbnr29.jpg" width="196" height="196" border="0"><br>
-    <br>
-    <img src="group_topsearch_title.jpg" width="253" height="26" border="0"><br>
-    <table border="0" id="HPB_TABLE_1_A_120528012336" class="hpb-cnt-tb1" cellspacing="1">
-      <tbody>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1" style="vertical-align : middle;">
-          <table>
-            <tbody>
-              <tr>
-                <td width="813">
+			<div style="position: absolute; left: 200px;" id="supernav">
+	<a class="menuitem supernav">
+		ストア	</a>
 
 
+	<a class="menuitem supernav">
+		コミュニティ	</a>
+			<a class="menuitem supernav username">
+			Maiko		</a>
+	
+	<a class="menuitem">
+		Steamとは	</a>
 
-<P class="test1" style="font-size:14px;">
-&nbsp;コマンド:<br>
-
-
-
-　・<b>!afk, !js</b>:<br>
-　　　観戦と参加。(away from keyboard, join survivors)<br><br>
-　・<b>!bot</b>:<br>
-　　　ボットを呼び寄せます。(It teleports all bots to you.)<br><br>
-　・<b>tap F key x2(!drop)</b>:<br>
-　　　手にしているアイテムを投げます。(throw the item you are holding.)<br><br>
-　・<b>tap F key x2 (!light)</b>(観戦/死亡時 for dead players/spectators.):<br>
-　　　自分からしか見えないライトで吹き飛んだアイテムを探してあげなくっちゃ。(personal lights only you can see.)<br><br>
-　・<b>!votemenu</b>:<br>
-　　　デフォルト以外のマップで遊ぶ/アイテムの集め場所を変える(to play unofficial survival maps/set place for item)<br><br>
-
-<P class="test2" style="font-size:14px;">
-
-====================================================================<br>
-　ラウンドの情報コマンド (damage stats)<br>
-　&lt;detail&gt; を末尾に追加するとより詳細な情報を表示します (&lt;detail&gt;: optional detail flag for more information)<br>
-　例(Ex.): !stats detail<br>
---------------------------------------------------------------<br>
-
-　<b>・!stats</b>: 本人の統計 (personal summarized stat)<br>
-　<b>・!stats all</b>: 4人分の統計 (summarized stats for all player)<br>
-　<b>・!stats mvp</b>: MVP情報を含む統計 (round stats with MVP info)<br>
-　<b>・!stats &lt;name&gt;</b>: &lt;特定のプレイヤー&gt; 個人の統計 (stats for &lt;specific player&gt;)<br>
-　<b>・!resetstats</b>: 管理者コマンド、統計のリセット (Admin Command for resetting stats)<br>
-
-====================================================================<br><br>
-</P>
-
-
-
-
-
-デフォルト以外のマップ↓</P>
-          </table>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table style="vertical-align : super;" bgcolor="#cccccc">
-            <tbody>
-              <tr>
-                <td style="vertical-align : top;" width="141" bgcolor="#cccccc">&nbsp;<img src="maps/c2--.jpg" width="128" height="64" border="0"></td>
-                <td style="vertical-align : middle;" width="653" bgcolor="#cccccc" colspan="2">ダーク・カーニバル<br>
-You must be this tall... TO DIE!<br>
-死地へ向かう門 そこには身長制限があるようだ</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="295" height="88"><img src="maps/c2m2_fairgrounds-.jpg" width="256" height="128" border="0" align="right"></td>
-                <td height="88" width="541">　c2m2_fairgrounds<br>
-                　遊園地&nbsp;</td>
-              </tr>
-              <tr>
-                <td width="295" height="88"><img src="maps/c2m3_coaster.jpg" width="256" height="128" border="0" align="right"></td>
-                <td height="88" width="541">　c2m3_coaster<br>
-                　ジェットコースター&nbsp;</td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table style="vertical-align : super;" bgcolor="#cccccc">
-            <tbody>
-              <tr>
-                <td style="font-size : 24px;vertical-align : top;" width="141">&nbsp;<img src="maps/c3.jpg" width="128" height="64" border="0"></td>
-                <td style="vertical-align : middle;" width="644" colspan="3">スワンプ・フィーバー&nbsp;&nbsp;&nbsp;<span class="topnews_title"></span>&nbsp;&nbsp;<br>
-THE ONLY CURE IS DYING<br>
-死...それが唯一無二の治療法</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="292"><img src="maps/c3m3_shantytown.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c3m3_shantytown<br>
-                　貧民街<br>
-                　<img src="ecalic024_013.png" width="76" height="16" border="0"></td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table style="vertical-align : super;" bgcolor="#cccccc">
-            <tbody>
-              <tr>
-                <td style="font-size : 24px;vertical-align : top;" width="141">&nbsp;<img src="maps/c5.jpg" width="128" height="64" border="0"></td>
-                <td style="vertical-align : middle;" width="644" colspan="3">ザ・パリッシュ&nbsp;&nbsp;&nbsp;<span class="topnews_title"></span>&nbsp;&nbsp;<br>
-	THIS TIME IT ALL GOES SOUTH<br>
-舞台はディープサウス
-</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="292"><img src="maps/c5m1_waterfront.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c5m1_waterfront<br>
-                　沿岸地区</td>
-              </tr>
-              <tr>
-                <td width="292"><img src="maps/c5m4_quarter.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c5m4_quarter<br>
-                　都市部</td>
-              </tr>
-
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table style="vertical-align : super;" bgcolor="#cccccc">
-            <tbody>
-              <tr>
-                <td style="font-size : 24px;vertical-align : top;" width="141">&nbsp;<img src="maps/c9.jpg" width="128" height="64" border="0"></td>
-                <td style="vertical-align : middle;" width="644" colspan="3">クラッシュ・コース&nbsp;&nbsp;&nbsp;<span class="topnews_title"></span>&nbsp;&nbsp;<br>
-Crashing will be the easiest thing they do today.</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="292"><img src="maps/c9m1_alleys.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c9m1_alleys<br>
-                　橋</td>
-              </tr>
-              <tr>
-                <td width="292"><img src="maps/c9m2_lots.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c9m2_lots<br>
-                　トラック置き場</td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table style="vertical-align : super;" bgcolor="#cccccc">
-            <tbody>
-              <tr>
-                <td style="font-size : 24px;vertical-align : top;" width="141">&nbsp;<img src="maps/c10-.jpg" width="128" height="64" border="0"></td>
-                <td style="vertical-align : middle;" width="644" colspan="3">デス・トール&nbsp;&nbsp;&nbsp;<span class="topnews_title"></span>&nbsp;&nbsp;<br>
-HELL CAME TO EARTH. THESE FOUR ARE GONNA SEND IT BACK.<br>
-そこは地上に現れた地獄...
-課せられたミッションは「ヤツらを地獄に送り返す」こと</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="292"><img src="maps/c10m2_drainage.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c10m2_drainage<br>
-                　排水溝</td>
-              </tr>
-              <tr>
-                <td width="292"><img src="maps/c10m3_ranchhouse.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c10m3_ranchhouse<br>
-                　教会</td>
-              </tr>
-              <tr>
-                <td width="292"><img src="maps/c10m4_mainstreet.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c10m4_mainstreet<br>
-                　田舎町<br>
-                　<img src="ecalic024_013.png" width="76" height="16" border="0"></td>
-              </tr>
-              <tr>
-                <td width="292"><img src="maps/c10m5_houseboat.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="486">　c10m5_houseboat<br>
-                　ボートハウス</td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table bgcolor="#cccccc" style="vertical-align : super;border-collapse : collapse;">
-            <tbody>
-              <tr>
-                <td width="141" height="56"><img src="maps/c11-.jpg" width="128" height="64" border="0">&nbsp;</td>
-                <td width="679" height="56" colspan="3">デッド・エア&nbsp;&nbsp;&nbsp;<br>
-THEIR FLIGHT JUST GOT DELAYED. PERMANENTLY<br>
-フライトは遅延された、永久に。</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="286"><img src="maps/c11m2_offices.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　c11m2_offices<br>
-                　クレーン</td>
-              </tr>
-              <tr>
-                <td width="286"><img src="maps/c11m3_garage.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　c11m3_garage<br>
-                　建設現場</td>
-              </tr>
-              <tr>
-                <td width="286"><img src="maps/c11m4_terminal.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　c11m4_terminal<br>
-                　ターミナル<br>
-                　<img src="ecalic024_013.png" width="76" height="16" border="0"></td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table bgcolor="#cccccc" style="vertical-align : super;border-collapse : collapse;">
-            <tbody>
-              <tr>
-                <td width="141" height="56"><img src="maps/c12.jpg" width="128" height="64" border="0">&nbsp;</td>
-                <td width="679" height="56" colspan="3">ブラッドハーベスト&nbsp;&nbsp;&nbsp;<br>
-
-NO HOPE. NO CURE. NO PROBLEM.<br>
-希望は消えた。治療法もない。
-だが、それでも彼らは進み続ける
-</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="286"><img src="maps/c12m2_traintunnel.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　c12m2_traintunnel<br>
-                　The Tunnel/トンネル</td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          </td>
-        </tr>
-        <tr>
-          <td width="788" class="hpb-cnt-tb-cell1">
-          <table bgcolor="#cccccc" style="vertical-align : super;border-collapse : collapse;">
-            <tbody>
-              <tr>
-                <td width="141" height="56"><img src="maps/add-on.jpg" width="128" height="64" border="0">&nbsp;</td>
-                <td width="679" height="56" colspan="3">アドオンマップ&nbsp;&nbsp;&nbsp;<br>
-DLしたvpkファイルを\Steam\SteamApps\common\Left 4 Dead 2\left4dead2\addonsフォルダにコピー</td>
-              </tr>
-
-              <tr>
-                <td width="141" height="56"><img src="maps/skybox1.jpg" width="80" height="64" border="0">&nbsp;</td>
-                <td width="679" height="56" colspan="3">
-skyboxがpurple/black checkerに見える場合はshader settingを上げてみてください。<br></td>
-              </tr>
-
-
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <tr>
-                <td width="286"><img src="maps/sv_lighthouse2.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　sv_lighthouse2<br>
-                　The Last Stand<br>
-                　IT DOESN'T END WELL.<br>
-                　<A HREF="http://www.l4dmaps.com/details.php?file=8087" TARGET="_blank">http://www.l4dmaps.com/details.php?file=8087</A></td>
-              </tr>
-            </tbody>
-          </table>
-
-
-          <table>
-            <tbody>
-              <tr>
-                <td width="286"><img src="maps/l4d2_slope.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　l4d2_slope<br>
-                　SLOPE<br>
-                　WHATEVER YOU DO, DON'T FALL!<br>
-                　<A HREF="http://www.gamemaps.com/details/2448" TARGET="_blank">http://www.gamemaps.com/details/2448</A></td>
-              </tr>
-            </tbody>
-          </table>
-
-
-
-
-          <table>
-            <tbody>
-              <tr>
-                <td width="286"><img src="maps/fanfeast.jpg" width="256" height="128" border="0" align="right"></td>
-                <td width="497">　fanfeast<br>
-                　Fan Feast<br>
-                　BOWLING - SKEEBALL - KARAOKE - ZOMBIES<br>
-                　<A HREF="http://www.gamemaps.com/details/2662" TARGET="_blank">http://www.gamemaps.com/details/2662</A></td>
-              </tr>
-            </tbody>
-          </table>
-
-
-
-
-          <br>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-<P style="font-size:14px;">
-<br><strong>サーバーの設定</strong><br>
-<ul class="server" >
-<li>サバイバルの定番ポジションにアイテムを集めてあります。他のポジションやデフォルト設定にも投票できます。</li>
-<li>近接武器が遠いマップに限り近くへ移動させています。</li>
-<li>ランダムアイテムのマップではアイテムを固定しています。屋上、電車、サクリ港、発電室。</li>
-<li>移動できてしまうspawn武器を固定しています。川岸。config by Killjoy</li>
-<li>床や棚に沈んで見えにくいアイテムの高さを調整して見えるようにしています。パシ港、ゲタビ。</li>
-<br>
-　スタック対策
-<li>スタックキル、<s>いたしておりません</s>。テスト中: ダカニコンサ、<s>発電室</s>。</li>
-<li>一部のマップでバリアフリーのリフォームをしています。<s>バス停</s>、納屋、砂糖工場、<s>発電室</s>。config by antena, Killjoy</li>
-</ul>
-</p>
-<br>
-<P style="font-size:14px;">
-<strong>寄付/Donation</strong><br>
-　　ピルをください。
-</p>
-
-
-    <div id="group_topbnr01"><!-- <img src="./images/group_topbnr22.jpg" class="topbnr1" alt="テレビ放映決定！">  --></div>
-    <!-- ▲BANNER1▲ -->
-    <div class="clear"></div>
-    <div class="clear"></div>
-  </div>
-  <!-- ▲CONTENTS▲ -->
-  <div class="page-up"><a href="#pagetop">ページの先頭に戻る</a></div>
-  <!-- ▼FOOTER BANNER▼ -->
-  <div class="clear"></div>
-  <!-- ▲FOOTER BANNER▲ --><!-- ▼FOOTER▼ -->
-  <div id="footer">
-    <ul>
-      <li>すたみな太郎グループ ｜
-      <li>オーダーバイキング・ご宴会 ｜
-      <li>その他グループ店 ｜
-      <li>会社案内 ｜
-      <li>お問い合わせ ｜
-      <li>サイトマップ ｜
-      <li>求人案内
-    </ul>
-  </div>
-  <!-- ▲FOOTER▲ --><!-- ▼END▼ -->
-  <div id="pageEnd">
-    <div class="footBanner">
-      <dl>
-        <dt><img src="get_flash_player.gif" alt="GET Flash Player !" width="88" height="31">
-        <dd>このページを正常に閲覧するためには、最新のFlash Playerが必要です。<br>
-        こちらからダウンロードしてください。
-      </dl>
-      <div class="clear"></div>
-    </div>
-  </div>
-  <!-- ▲END▲ -->
+	<a class="menuitem">
+		サポート	</a>
 </div>
-<!-- ▲PAGE▲ --></body>
-</html>
+
+			<div id="global_actions">
+									<div class="user_avatar">
+						<div class="playerAvatar offline">
+							<a href="http://steamcommunity.com/profiles/76561197990201845"><img id="headerUserAvatarIcon" src="files/88c0ff3a84975a322a2813a50f1c4b8868c02fc0.jpg" alt=""></a>
+						</div>
+					</div>
+								<div id="global_action_menu">
+
+					<div class="header_installsteam_btn header_installsteam_btn_gray">
+						<div class="header_installsteam_btn_leftcap"></div>
+						<div class="header_installsteam_btn_rightcap"></div>
+						<a class="header_installsteam_btn_content">
+							Steamをインストール						</a>
+					</div>
+																	<!-- notification inbox area -->
+												<div id="header_notification_area">
+									<div id="header_notification_link" class="header_notification_btn header_notification_empty">
+		</div>
+
+						</div>
+
+						<span class="pulldown global_action_link" id="account_pulldown" onclick="ShowMenu( this, 'account_dropdown', 'right' );">Eメーリ</span>
+						<div class="popup_block" id="account_dropdown" style="display: none;">
+							<div class="shadow_ul"></div><div class="shadow_top"></div><div class="shadow_ur"></div><div class="shadow_left"></div><div class="shadow_right"></div><div class="shadow_bl"></div><div class="shadow_bottom"></div><div class="shadow_br"></div>						
+
+						</div>
+						<script type="text/javascript">
+							$J( function() { RegisterFlyout( 'account_language_pulldown', 'language_dropdown', 'leftsubmenu', 'bottomsubmenu' ); } );
+						</script>
+									</div>
+			</div>
+			
+			
+			
+		</div>
+
+	</div>
+
+
+<div id="modalBG" style="opacity: 0.7; display: none;"></div>
+<div class="apphub_HomeHeaderContent">
+
+
+	
+	<div class="apphub_HeaderTop">
+		<div class="apphub_OtherSiteInfo">
+										<a style="position: relative; z-index: 1;" class="btnv6_blue_hoverfade btn_medium">
+					<span>ストアページ</span>
+				</a>
+					</div>
+		<div class="apphub_AppIcon"><img src="files/7d5a243f9500d2f8467312822f8af2a2928777ed.jpg"><div class="overlay"></div></div>
+		<div class="apphub_AppName ellipsis">Left 4 Dead 2</div>
+		<div style="clear: both"></div>
+		<div class="apphub_sectionTabs">
+				
+	<a class="apphub_sectionTab  "><span>全て</span></a>
+					
+	<a class="apphub_sectionTab  "><span>話題</span></a>
+					
+	<a class="apphub_sectionTab  "><span>スクリーンショット</span></a>
+					
+	<a class="apphub_sectionTab  "><span>作品</span></a>
+	
+										<div class="apphub_sectionTabNewWrapper ">
+		<span class="apphub_sectionTabNew NoSelect">NEW!</span>
+	
+	<a class="apphub_sectionTab  "><span>ブロードキャスト</span></a>
+			</div>
+				
+				
+	<a class="apphub_sectionTab  "><span>ムービー</span></a>
+					
+	<a class="apphub_sectionTab  "><span>ワークショップ</span></a>
+					
+	<a class="apphub_sectionTab  "><span>ニュース</span></a>
+					
+	<a class="apphub_sectionTab  "><span>お知らせ</span></a>
+					
+	<a class="apphub_sectionTab active "><span>ガイド</span></a>
+					
+	<a class="apphub_sectionTab  "><span>レビュー</span></a>
+										<div style="clear: left"></div>
+		</div>
+	</div>
+	<div class="apphub_sectionTabsHR"></div>
+
+	
+</div>
+
+	<div class="apphub_HeaderBottomBG_ctn">
+		<div class="apphub_HeaderBottomBG"></div>
+	</div>
+	<div class="breadcrumbs">
+<div Align="left"><font size="3" color="tomato">オリジナルURL: http://steamcommunity.com/sharedfiles/filedetails/?id=122543624 英辞郎 訳2015-02-14</font></div>							<a>Left 4 Dead 2</a>
+					&gt;&nbsp;<a>ガイド</a>
+					&gt;&nbsp;<a>gygyが作成したガイド</a>
+						</div>
+
+	<!-- /header bar -->
+</center>
+<!-- /top content -->
+<!-- main body -->
+
+<div id="ig_bottom" class="nobg mediaBody">
+
+
+<div class="guideTop">
+	<div id="detailsHeaderRight">
+		<!-- top level info -->
+					<div class="ratingSection">
+				<div class="fileRatingDetails"><img src="files/4-star_large.png"></div>
+				<div class="numRatings">149 人が評価</div>			</div>
+				</div>
+	<div class="guideTopContent">
+		<div class="guidePreviewImage">
+			<img src="files/128x128.png">
+		</div>
+		<div class="workshopItemTitle">Gold Miners L4D2 サバイバルガイド</div>
+		<div class="guideAuthors">作者： gygy と　2 のコラボレーション</div>
+		<div class="dotHR"></div>
+		<div style="clear: left"></div>
+		<div class="guideTopDescription" id="highlightContent">
+このガイドはLeft 4 Dead 2のサバイバルモードで使われるさまざまな戦略を徹底的に説明します。
+それはもともと、Gold Minersグループ(サバイバルプレイヤーの国際的グループ)のものです。
+ガイドは各マップのための戦略の説明とビデオを含みます。</div>
+	</div>
+		<div style="height: 50px; display: none;"></div><div style="position: relative;" class="workshopItemControls" id="ItemControls">
+						<span onclick="VoteUp(122543624);" id="VoteUpBtn" class="general_btn voteUp ">レート</span>
+		<span id="VoteDownBtn" class="general_btn voteDown ">&nbsp;</span>
+		<div class="vertical_divider_container"><img class="vertical_divider" src="files/trans.gif"></div>
+		
+				<span id="FavoriteItemBtn" class="general_btn favorite tooltip ">
+			<div class="favoriteText">
+				<div id="FavoriteItemOptionAdd" class="favoriteOption addfavorite selected">お気に入り</div>
+				<div id="FavoriteItemOptionFavorited" class="favoriteOption favorited ">お気に入り</div>
+				<div class="favoriteOption removefavorite">お気に入りから削除</div>
+			</div>
+		</span>
+				<div class="share_controls">
+			<span id="ShareItemBtn" class="general_btn share tooltip">共有</span>
+		</div>
+
+		
+				<div class="vertical_divider_container"><img class="vertical_divider" src="files/trans.gif"></div>
+
+
+					<span id="ReportItemBtn" class="general_btn report tooltip "></span>
+
+				<span id="action_wait" style="display: none;">
+			<img src="files/throbber.gif">
+		</span>
+				<div style="clear:left"></div>
+	</div>
+
+	
+	<div style="clear:both"></div>
+
+	<div id="JustFavorited" class="just_added_to_list" style="display: none">
+		<div class="just_added_favorite_icon"></div>
+		<div class="just_added_text">このアイテムがあなたの <a href="http://steamcommunity.com/my/myworkshopfiles/?section=guides&amp;browsefilter=myfavorites">お気に入り</a> に追加されました。</div>
+		<div class="close_notification"><span onclick="CloseNotification( 'JustFavorited' );" class="close"><img src="files/ico_dialogue_close.png"></span></div>
+		<div style="clear:both"></div>
+	</div>	<div style="clear: both"></div>
+</div>
+
+<!-- right side contents -->
+<div id="rightContents">
+	<div class="sidebar">
+		<!-- created by -->
+		<div class="panel">
+			
+<div class="rightSectionTopTitle">作成者：</div>
+<div class="rightDetailsBlock">
+	<div class="creatorsBlock">
+					<div onclick="top.location.href='http://steamcommunity.com/id/93_/myworkshopfiles/?section=guides&amp;appid=550'" class="friendBlock_in-game" data-miniprofile="41804560">
+				<div class="friendBlockIcon">
+					<div class="iconHolder_in-game"><div class="avatarIcon"><a href="http://steamcommunity.com/id/93_/myworkshopfiles/?section=guides&amp;appid=550"><img src="files/0444fd2a84881d8e3af8aa4b2f5cb71f0125f343.jpg"></a></div></div>
+				</div>
+				<div class="linkAuthor"><a style="overflow:hidden;" class="linkFriend_in-game" href="http://steamcommunity.com/id/93_/myworkshopfiles/?section=guides&amp;appid=550">Licksore</a><br></div>
+				<div class="viewAuthorFilesLink">全ての共有ファイルを表示する</div>
+			</div>
+						<div onclick="top.location.href='http://steamcommunity.com/profiles/76561198009390365/myworkshopfiles/?section=guides&amp;appid=550'" class="friendBlock_offline" data-miniprofile="49124637">
+				<div class="friendBlockIcon">
+					<div class="iconHolder_offline"><div class="avatarIcon"><a href="http://steamcommunity.com/profiles/76561198009390365/myworkshopfiles/?section=guides&amp;appid=550"><img src="files/829029c98e0efbb9185e8f78af788aed3e202158.jpg"></a></div></div>
+				</div>
+				<div class="linkAuthor"><a style="overflow:hidden;" class="linkFriend_offline" href="http://steamcommunity.com/profiles/76561198009390365/myworkshopfiles/?section=guides&amp;appid=550">gygy</a><br></div>
+				<div class="viewAuthorFilesLink">全ての共有ファイルを表示する</div>
+			</div>
+						<div onclick="top.location.href='http://steamcommunity.com/id/nupraptor1/myworkshopfiles/?section=guides&amp;appid=550'" class="friendBlock_offline" data-miniprofile="54828504">
+				<div class="friendBlockIcon">
+					<div class="iconHolder_offline"><div class="avatarIcon"><a href="http://steamcommunity.com/id/nupraptor1/myworkshopfiles/?section=guides&amp;appid=550"><img src="files/8f173a5680454e8049c012f71fd6ffa1fd6553fd.jpg"></a></div></div>
+				</div>
+				<div class="linkAuthor"><a style="overflow:hidden;" class="linkFriend_offline" href="http://steamcommunity.com/id/nupraptor1/myworkshopfiles/?section=guides&amp;appid=550">Azimuth</a><br></div>
+				<div class="viewAuthorFilesLink">全ての共有ファイルを表示する</div>
+			</div>
+				</div>
+</div>
+
+
+			<div class="hr padded"></div>	<div class="rightDetailsBlock">
+	<div class="workshopTags"><span class="workshopTagsTitle">カテゴリ:&nbsp;</span><a>Co-op</a>, <a>Game Modes</a>, <a>Gameplay Basics</a>, <a>Maps Or Levels</a>, <a>Multiplayer</a>, <a>Walkthroughs</a></div><div class="workshopTags"><span class="workshopTagsTitle">Languages:&nbsp;</span><a>English</a></div><div class="workshopTags"><span class="workshopTagsTitle">Game Modes:&nbsp;</span><a>Survival</a></div>	</div>
+
+			<div class="hr padded"></div>
+
+			<div class="rightDetailsBlock">
+				<div class="detailsStatsContainerLeft">
+					<div class="detailsStatLeft">投稿日： </div>
+										<div class="detailsStatLeft">更新日： </div>
+									</div>
+				<div class="detailsStatsContainerRight">
+					<div class="detailsStatRight">2013年1月25日 1時43分</div>
+										<div class="detailsStatRight">2014年12月30日 17時11分</div>
+									</div>
+				<div style="clear:left"></div>
+			</div>
+		</div>
+
+			<div class="panel">
+			<table class="stats_table">
+								<tbody><tr>
+					<td>5,147</td>
+					<td>訪問者数</td>
+				</tr>
+												<tr>
+					<td>150</td>
+					<td>現在のお気に入り</td>
+				</tr>
+			</tbody></table>
+	</div>
+			<!-- favorited by -->
+							<div class="panel">
+					<div class="rightSectionHolder">
+						<div class="rightDetailsBlock">
+							<div class="friends_favorited_text">2 人のフレンドがお気に入りに追加しました</div>
+							<div class="friend_favorited_block_row">
+																	<div class="friend_favorited_block_container">
+										<div class="friend_favorited_block">
+											<div class="iconHolder_default"><img src="files/48d29ae6f2a767f1a34daa148f9d7167ef2d16a3.jpg" title="Hobd"></a></div>
+										</div>
+									</div>
+																		<div class="friend_favorited_block_container">
+										<div class="friend_favorited_block">
+											<div class="iconHolder_default"><img src="files/c986e516b45c656f058c76f3243a9b677fb50909.jpg" title="ẞѲֆֆ ャŋѳ♒⓵"></a></div>
+										</div>
+									</div>
+																	<div style="clear: left;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+		<div style="height: 729px; display: none;"></div><div style="position: relative; display: block;" class="panel" id="GuideTableOfContents">
+			<div class="rightSectionTopTitle">ガイド目次</div>
+
+			<div class="hr smallpadded"></div>
+
+			<div class="guideSubSectionSelection selected" id="guideSectionSelection_0">
+				<img class="browseOptionImage" src="files/filterselect_blue.png">
+				<div class="guideSubSectionSelectionLink ellipsis">
+					<a href="javascript:SelectGuideSection(%20'0',%20'changeHash'%20)">概要</a>
+				</div>
+			</div>
+			<div class="hr smallpadded"></div>
+
+								<div class="guideSubSectionSelection" id="guideSectionSelection_17300">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17300',%20'changeHash'%20)">Introduction [はじめに]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17302">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17302',%20'changeHash'%20)">Core Concepts [中心的な概念]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17304">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17304',%20'changeHash'%20)">Weapons [武器]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17313">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17313',%20'changeHash'%20)">Mall Atrium [アトリウム]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17449">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17449',%20'changeHash'%20)">Mall Atrium (continued) [(つづき)]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17450">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17450',%20'changeHash'%20)">Motel [ハイウェイ]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17451">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17451',%20'changeHash'%20)">Stadium Gate [納屋(Barns)]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17452">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17452',%20'changeHash'%20)">Concer [コンサート]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17454">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17454',%20'changeHash'%20)">Gator Village [木材工場]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17457">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17457',%20'changeHash'%20)">Plantation [プランテーション]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17462">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17462',%20'changeHash'%20)">Sugar Mill [砂糖精製工場]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17465">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17465',%20'changeHash'%20)">Burger Tank [工場町]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17467">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17467',%20'changeHash'%20)">Bus Depot [公園]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17470">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17470',%20'changeHash'%20)">Bridge [橋]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17473">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17473',%20'changeHash'%20)">Riverbank [川岸]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17474">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17474',%20'changeHash'%20)">Underground AKA Bedlam [地下]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17478">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17478',%20'changeHash'%20)">Port (Passing) [港]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17481">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17481',%20'changeHash'%20)">Traincar [電車]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17493">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17493',%20'changeHash'%20)">Port (Sacrifice) [港]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17485">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17485',%20'changeHash'%20)">Generator Room [発電室]</a>&nbsp;
+						</div>
+					</div>
+										<div class="guideSubSectionSelection" id="guideSectionSelection_17490">
+						<img class="browseOptionImage" src="files/filterselect_blue.png">
+						<div class="guideSubSectionSelectionLink ellipsis">
+							<a href="javascript:SelectGuideSection(%20'17490',%20'changeHash'%20)">Rooftop [屋上]</a>&nbsp;
+						</div>
+					</div>
+					
+			<div class="hr smallpadded"></div>
+			<div class="guideSubSectionSelection" id="guideSectionSelection_-1">
+				<img class="browseOptionImage" src="files/filterselect_blue.png">
+				<div class="guideSubSectionSelectionLink ellipsis">
+					<a href="javascript:SelectGuideSection(%20'-1',%20'changeHash'%20)">コメント</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="profileBlock" class="clearfix">
+
+
+<div class="guide subSections">
+				<div class="subSection detailBox" id="17300">
+				<div class="subSectionTitle">
+					はじめに									</div>
+				<div class="subSectionDesc">
+サバイバルモードは、何度も繰り返してプレイできる激しく挑戦的で楽しいゲームプレイを提供しています。
+しかしそこにはたくさんのチームワークと戦略が要求されます。
+以下のガイドは、グリッチ、エクスプロイト、またはチートの使用に頼ることなく、すべての公式Left 4 Dead 2サバイバルマップ上で金メダルを達成するために使用される戦略を発展、改善するために継続的な作成中です。
+それはすべてのスキルレベルのプレイヤーを対象にしていますが、あなたが志を同じくする人々のチームを見つけることをお勧めします、そうでなければあなたは目標を達成するのにいくつかの問題をかかえるでしょう。
+
+<br><br>個々のマップ/戦略は以下を含みます:<br>- アイテム情報/数量<br>- ポジション(画像表現で)<br>- 何に気をつけるべきかという注意とそのマップ特有のヒント<br>- 各戦略に関連する動画<br><br><div class="bb_h1">感謝</div><br>この文書を編集してくれて、マップ解説の多くを提供してくれたLicksoreに、また、Azimuth、sauce、TheKevSham、映像コンテンツ制作者、および貢献をしてくれた他の誰にも感謝します。
+<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17302">
+				<div class="subSectionTitle">
+					中心的な概念									</div>
+				<div class="subSectionDesc">
+					<div class="bb_h1">弾薬補給</div><br>タンクの攻撃の波には途切れがあります。これらの途切れは弾薬補給へ走るチャンスです。時間:<br><br><ul class="bb_ul"><li> 1:30<br></li><li> 2:30 (任意)<br></li><li> 4:00<br></li><li> 6:00<br></li><li> 9:00<br></li><li> 12:00</li></ul><br>これらの途切れはタンクがいつ出現していつ死ぬかに依存します。
+タンクが遠くで出現する場合弾薬補給の邪魔をするかもしれません。タンクを十分速く倒せなかった場合も同様です。
+ 12:00以降弾薬補給に走ることは絶対ではありません、そしてタンクはほとんど連続的に来ます。<br><br><div class="bb_h1">タンク出現</div><br><ul class="bb_ul"><li> 0:40<br></li><li> 1:55<br></li><li> 2:55<br></li><li> 4:25<br></li><li> 5:25<br></li><li> 5:35<br></li><li> 7:05<br></li><li> 7:45<br></li><li> 8:25<br></li><li> 10:05<br></li><li> 10:45<br></li><li> 11:20<br></li><li> 11:30<br></li><li> 12:50</li></ul><br>ここ以降、タンクの出現はマップ全体とラウンドで一貫していません、しかし1分間に1-2体のタンクがいつでも出現すると仮定してプレイします。
+同時に出現しているタンクの最大数が2であることにも注意してください、そして特殊感染者(ハンター、スモーカー、チャージャー、ジョッキー、スピッター、ブーマー)の最大数は7です。
+<br><br><div class="bb_h1">いつ回復するべきですか</div><br>回復する正確な時間は個人的な基準です、しかしそれはゲームの結果に大いに影響を及ぼします。<br><br><b>ピル、アドレナリン、キット</b><br>
+ピルは一時的なヘルスを与えますが、即座に使用されます、ところがキットは永久のヘルスを与えて、使用に時間がかかります。
+ヘルスが低い、そして回復する十分な時間があるときキットを使用するべきです。
+ピルはあなたが行動不能にされるのを防ぐために追加の強化を必要とする非常事態のときに使うべきです。<br><br>    	
+    L4D2ではアドレナリンを使う選択肢もあります。
+    アドレナリンは生存者のすべての動作の速度に即座の強化を与えます。
+    それは特殊感染者を上回って、より速く生存者を救助することができます。
+    しかし、それはあなたのヘルスに大きなボーナスを与えません。
+    アドレナリンは、複数の生存者が行動不能になる、または、緊急脱出が必要であるような重要な時のために取っておかれなければなりません。
+    それは通常の治療目的のために使うべきではありません。<br><br><div class="bb_h1">心に留めておくべき他のもの</div><ul class="bb_ul"><li>一般的な認識はL4D2に不可欠です。あなたの周囲の状況、チームメイト、これからの脅威に、用心深く気づいていてください。
+
+タンクがどこでいつ出現するか、背後にまたはまだ見えないところに脅威があるかどうか、
+チームメイトが困っているなら彼らがどこにいるか知ることを、指向性サウンドを手がかりにしてください。
+
+    よりよく感染者を聞くために、できるなら音楽を消してください。<br></li><li>マップの知識はあなたの記録を向上するのに間違いなく最も重要な要因です、そしてただ繰り返しマップをプレイすることで各々のマップについて、そして各自のポジションについて微妙なニュアンスを学びマップの知識を得ます。
+
+
+くりかえしマップをプレイすることで感染者の出現場所とAIの通り道も、アイテムの場所も、同様にタンクで孤立することになった場合の代わりの通路も、アイテム補給への最も楽なルートも学びます。<br></li><li>移動する時や、あなたの側にタンクがあるような脅威があるとき、または援助が必要なら、伝えてください。<br></li><li>一旦死んだなら、チームメイトの死角を見て特殊感染者と彼らの場所をコールすることによってあなたはチームを助け続けることができます。
+自分だけでなく、全員が倒れるまでラウンドは終わっていません。</li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17304">
+				<div class="subSectionTitle">
+					武器									</div>
+				<div class="subSectionDesc">
+					L4D1とは異なりL4D2はサバイバルモードで効果的に使うことができるいろいろな武器を特徴とします。
+連射速度の高い武器はタンクをかなり減速します（例えばM-16、MAC-10）、そしてこれがタンクに隣接してテストされた点に注意することは重要です。<br><br>
+<img src="files/a_018.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><b>ミリタリー・スナイパー</b><br>(30発マガジン)<br>タンク・キル: 45発 (17秒*)<br><br>精度を高めるためにスコープを使用してください。<br><br>
+<img src="files/a_006a.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><b>AK-47</b><br>(40発マガジン)<br>タンク・キル: 71発 (12秒*)<br><br>全てのアサルトライフル系で秒間ダメージ最高。<br><br>
+<img src="files/a_004.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><b>M-16</b><br>(50発マガジン)<br>タンク・キル: 125発 (16秒*)<br><br>全てのアサルトライフル系で最速のリロード時間。<br><br><img src="files/a_026.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><b>デザートライフル/FN SCAR</b><br>(60発マガジン)<br>タンク・キル: 96発 (15秒*)<br><br>
+<img src="files/a_025.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><b>タクティカルショットガン</b><br>(10発マガジン)<br>タンク・キル: 20発 (10秒*)<br><br>距離が離れると威力を発揮できないのでロングレンジのマップには不向きです。フレンドリー・ファイア1発で最大11ダメージを与えます。<br><br><div class="bb_h1">近接武器</div><br>L4D2でプレイヤーにはピストルの代わりに近接武器を使う選択があります。
+近接武器を使う利点は、感染者を素早くクリアできる能力です。
+チェーンソーを除いて、すべての近接武器はヒット数と同じ数の感染者をキルできます。<br><br>通常感染者、ハンター、スモーカー、ブーマー、スピッター、ジョッキー：
+1ヒット<br>チャージャー：
+2ヒット<br>タンク：
+20ヒット<br><br>また一方、スモーカーの舌を切ることによって身を守ることができるので、消火斧やバールのような斬る系の近接武器は最高です。
+Ping、lerp、距離は舌を切るとき考慮に入れる必要がある要因です、しかしそれは確かにあなたが学ばなければならない技術です！<br><br><div class="bb_h1">固定武器</div><br>固定武器は、プレイヤーが弾薬を補充するために新しい銃を拾えるようにします。
+固定武器でキャンプする場合、リロードするよりはむしろ再びその武器を速く拾うことができます（スパムとして知られています）
+		<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17313">
+				<div class="subSectionTitle">
+					Mall Atrium									</div>
+				<div class="subSectionDesc">
+					<img src="files/a_023.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>アトリウムはそのデザインのためユニークなマップです。それは生存者がアクセス可能な3階のフロアを持ちます、そのため、効果的な戦略の観点からプレイヤーにたくさんの機動性を与えます。このマップをプレイするには2つの方法があります：
+周回ランニングとホールド。
+ホールドは他の従来の戦略のようにすべてを殺そうとします、一方、周回ランニングは反時計回りのルートでタンクから逃れて走ることを含みます。<br><br><b>アイテム</b><br><img src="files/a_020.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br><br><div class="bb_h1"><b>周回ラン</b></div><br>これはおそらくLeft 4 Dead 2で最も有名な戦略です、
+そしてソロプレイや、まとまりのないパブリックゲームで使用することができます。
+それは、反時計回りのルートでタンクから逃げてマップの中を走ります。
+きちんと実行するとタンクは生存者に決して追いつかないので、あなたを追っているタンクを殺すことは不必要です。
+実際、ルートに沿って新しいタンクが出現して遮断される可能性があるので、タンクを殺すことを控えることをお勧めします。
+周回戦略は1人のプレイヤーで行うことができます、さらにプレイヤーがタンクと特殊感染者を避けるのが十分に上手であるなら、武器なしでさえ行うことができます。<br><br><b>武器</b><br><br>どんな武器でも周回戦略にふさわしいです、しかし若干の武器には利点があります...<br><br>
+<u>スナイパーライフル</u>:
+この武器はあなたが分断されたあとチームメイトを救うのに良いです、そして熟練したスナイパーであるなら1発のヘッドショットでチャージャーを除いてどんな特殊感染者でもキルすることができます。
+しかし、それには3秒のリロード時間があって、移動している間は非常に精度が落ちます。
+<br><u>タクティカルショットガン</u>:
+この武器はあなたが動いている間も精度を失わないのでランニングのために素晴らしいです、そして、その強力な拡散のため、あなたはじゃまな通常感染者と特殊感染者をなぎ倒すことができます。
+不利な点はそのとても短い有効距離です;
+あなたは別れたチームメイトを素早く救うことができません。
+<br><u>M-16アサルトライフル</u>: 
+この武器は、すべての状況によいです。
+リロード時間が短く、あなたの行く手のゾンビを素早くクリアすることができます。
+
+<br><br><br><b>以下は周回戦略の説明です。</b><br><br><img src="files/a_023a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br>開始位置は「セーフルーム」と呼ばれる木材で囲まれた3階です。
+プレイヤーは、タンクが近づくのを待ちます。
+タンクは正面または後方から来るかもしれません。
+一旦タンクがそこに来るとプレイヤーは床の穴を通り抜けてランを開始します。<br><br><img src="files/a_019a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br>主なルートは、実線の矢印で示されます。
+1階までの緊急脱出ルートは破線の矢印で示されます。<br><br><img src="files/a_016a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br>2階でランを続けます。
+2本の緊急脱出ルートを示します。<br><br><img src="files/a_015a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br>2階から1階へ移ります。
+緊急脱出ルートを示します。
+<br><br>反時計回りに2階を走り抜けてください。
+タンクは岩を放り投げるために立ち止まるので、あなたにたぶん追いつきません。
+2階で弾薬を補充してください、そして、1階に至る足場に落ちてください。<br><br><img src="files/a_012a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br>3階に戻り周回の仕上げです。<br><br>必要ならアイテムを得るために案内所に向って走ってください。
+3階の開始位置に達する階段に向って走ってください。
+今チームは周回を完了しました、そして、タンクの接近を待ってランを再開する準備ができています。<br><br><div class="bb_h1">動画</div><br><li>52 Minutes by AnGeR (Solo)<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/oWWvco07Yik" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_059.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Solo Run - Mall Atrium - 52min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 1,121		</div>
+		<div class="dynamiclink_description">
+			Doing a solo run, killing all stuck Tanks and SI. Moving suplies. I'm
+ trying to make Si and Tank just follow me and not killing them (Only 
+killing dangerous SI, most of them jockeys and smokers) .		</div>
+	</div></a>
+</div><br></li><li>Tank Escape Routes by AnGeR<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/i1c020ARyZs" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_017.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Tank Dance (Ways to escape) in Atrium by AnGeR&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 2,081		</div>
+		<div class="dynamiclink_description">
+			I show u some ways I've learned to Dance with Tank and some ways to 
+escape from him in the Mall Atrium map. Are you ♥♥♥♥ed in some places or
+ moments of the game?		</div>
+	</div></a>
+</div></li>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17449">
+				<div class="subSectionTitle">
+					Mall Atrium (続き)									</div>
+				<div class="subSectionDesc">
+					<div class="bb_h1"><b>スタンダード・ブリッジホールド</b></div>プレイヤーは弾薬がある3階の橋をホールドします。<br><br><b>ポジション</b><br>- 1プレイヤー、左側 (弾薬のそば)<br>- 2プレイヤー、橋の中央<br>- 1プレイヤー、右側 (階段の上)<br><br>M-16またはスナイパーライフルはかなり推薦されます。
+タンクを減速するために少なくとも1人がM-16を使うことは役に立ちます。
+左側と右側のプレイヤーは、通常感染者を処理するためにM-16を使いたいかもしれません。<br><br>左側のプレイヤーは、スモーカーの舌を切るために近接武器を使わなければなりません。
+右からのタンクが橋を渡って導かれているとき、このプレイヤーは左側を掃除します。
+彼／彼女は左から橋を渡ってタンクを導いて、岩のおとりの役割もします。<br><br>2人の中央のプレイヤーは、多くの通常感染者を処理する必要がないので（外側のプレイヤー達が彼らの仕事をしているなら）タンクに最も多くの損害を与えなければなりません。
+彼らは、外側のプレイヤーにタンクの位置と来ている他の特殊感染者について警告もしなければなりません。<br><br>階段を守っている右側プレイヤーは、タンクが橋の左から右へ導かれているとき、障害物がない経路を提供するために階段と右側をクリアし続けなければなりません。<br><br><b>注意</b><br><br><ul class="bb_ul"><li>火力＞火炎です。タンクに着火することよりも射撃に集中してください。<br></li><li>必要に応じてそしてクリアならタンクを床の穴で釣ることができます。<br></li><li>主な脅威: 左クローゼットからのタンク、スモーカー、ジョッキー、チャージャー。<br><br><div class="bb_h1">動画</div><br>
+
+
+<li>116 Minutes by AnGeR<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/_3jDpdRfGFY" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_037.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Survival - Mall Atrium 116:17.60&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 16,986		</div>
+		<div class="dynamiclink_description">
+			Playing Left 4 Dead 2 in Survival mode, holding the bridge of Dead 
+Center's Mall Atrium: 1 player on the left side (Eph) 2 players in the 
+middle of the bridge (Kris, AnGeR) 1 player in the right...		</div>
+	</div></a>
+</div>
+
+
+<br></li><li>86 Minutes by TheKevSham<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/AjM2dNnH5KQ" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_004.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Deadcenter 86mins (no glitch)&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 932		</div>
+		<div class="dynamiclink_description">
+			The intensity of legit Left4Dead 2 survival with an experienced team 
+(no glitching, no items moved). For the best experience please watch in 
+1080p HD, thank you and enjoy.		</div>
+	</div></a>
+</div></li></ul><br><div class="bb_h1"><b>セーフルームホールド</b></div>多くのプレイヤーは3階の囲われた地域をセーフルームと呼びます。
+この戦略はランニングとタンクを倒すことを含むので複合型寄りです。<br><br><img src="files/a_023a.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a><b>ポジション</b><br>- 1スナイパー、前側-左 (A)<br>- 1スナイパー、前側-右 (B)<br>- 1スナイパー、前側-中央 (C)<br>- 1ショットガン、後方 (D)<br><br><br><br><br>弾薬補給ランの間隔を伸ばすために、セカンダリとしてすべてのプレイヤーがマグナムを使うよう勧めます。<br><br>前側左のプレイヤーは、タンクを部屋に導いて穴のまわりで彼らを釣ります。
+タンクが後方ならこのプレイヤーは前方を守り続けます。<br><br>他の前側プレイヤーは、タンクをいらつかせないようにより早くバックしなければなりません。
+タンクが来るまではマグナムを使うべきです。<br><br>前側-中央は、必要であるとき振り返って後方を手伝う自由に動ける位置です。
+彼／彼女はいつもスナイパーライフルを持ち通常感染者の代わりに特殊感染者とタンクに集中するべきです。<br><br>後側のプレイヤーはいつもショットガンを使わなければなりません。
+通常感染者は後ろに多くありません、チームはジョッキーとチャージャーの準備ができている必要があります。
+ジョッキーがすぐに頭に落ちてくるので、後方の壁に対して寄り添っていないことがよいです。
+このプレイヤーは、後方からのタンクを穴のまわりで釣る役割があります。
+タンクが前側から部屋に入るとき、後側のプレイヤーはタンクを手伝う代わりに、後ろを守り続けます。<br><br><b>注意</b><br><ul class="bb_ul"><li>通常の弾薬補給タイミングで3階の橋で全員で弾薬をゲットしてください。
+12:00以降に弾薬が必要なら、次のタンクが来るとき周回を一緒に始めてください。<br></li><li>主な脅威：
+スピッター、前方と後方から同時のタンク、後方からのチャージャーとジョッキー。<br></li><li>部屋で特殊弾薬を展開して非常事態のためにだけそれを取っておいてください。<br></li><li>割れ目の間に、またはセーフルームに最も近いクローゼットにガス缶を保存してください。
+後側のプレイヤーと1人の前側プレイヤーは、周回から帰るとき前方と後方のためのガス缶を運ぶことを担当します。
+2体のタンクが前方にあるなら前方を燃やしてください。<br></li><li>2体のタンクが後方から、または2体の削れていないタンクが前方の近くにあるなら、周回を始めてください、さもなければはさまれます。<br><br><div class="bb_h1">動画</div><br><li>60 &amp; 79 Minute Rounds by Lone Wolf McQuade<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/2fWy_tB2qug" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_053.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Gold Miners - Hour Survival - Mall Atrium&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 677		</div>
+		<div class="dynamiclink_description">
+			A little mix of a couple hour-long runs we've had on Dead Center's 
+Atrium in L4D2 Survival. Players (60 min) - Domino Effect, Guyguy, 
+Sauce, Lone Wolf McQuade Players (79 min) - Reminiscence,...		</div>
+	</div></a>
+</div><br></li><li>71 Minutes by Licksore<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/auhrbEbK3XA" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_048.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Mall Atrium 71 Minutes (saferoom hold)&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 1,139		</div>
+		<div class="dynamiclink_description">
+			TIME &amp; MAP: 71:51.17 - L4D2 Mall Atrium TEAM: Domino Lone Wolf 
+McQuade (http://www.youtube.com/user/rimrattler8/videos) TheKevSham 
+(http://www.youtube.com/user/TheKevSham/videos) and myself,...		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17450">
+				<div class="subSectionTitle">
+					Motel									</div>
+				<div class="subSectionDesc">
+					<img src="files/a_008.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>このマップはモーテルの一部である多くの小さな部屋を含みます。
+しかしこれらの部屋は窮屈なため中でホールドすることは非常に困難です。
+より良い選択は、道路を過ぎたマップの角のより広々とした地域です。<br><br><b>アイテム</b><br><img src="files/a_016.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br><div class="bb_h1"><b>Highway</b></div><br><img src="files/a_013m.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a><b>ポジション</b><br>- 1スナイパー、右側 (A)<br>- 2スナイパー、中央 (BとC)<br>- 1スナイパー、左側ガス缶そば (D)<br><br>弾薬補給はこのマップにとって厳しいのでセカンダリのピストルは推薦されます。<br><br><br>左側 (D)のプレイヤーは、タンクと他の感染者が細く絞られて彼に集中するように、他プレイヤーよりトラックにずっと近くなければなりません。
+彼／彼女はラジオがある右側からのタンクに対して最高の見通しがあります。
+このプレイヤーは、2体のタンクに対して、または、速くタンクを倒すことができないトラブルをチームがかかえているならタンクのたびに、正面にガス缶を投げる役割を果たします。
+
+<br><br>右側のプレイヤー達は、タンクと特殊感染者がプールから来ているのを見ることができます。
+彼らは、右の茂みを乗り越えるタンクと特殊感染者にも注意する必要があります。<br><br><b>注意</b><br><ul class="bb_ul"><li>ほとんどのタンクは前方の右側から、または、トラックの運転席とバスの間のどこか前方から来ます。<br></li><li>最初の12分の間バスの裏の地面にある弾薬を取りに行くことは可能です。<br></li><li>12:00以後プレイヤーは屋根の弾薬へ周回しなければなりません。<br></li><li>これらのランニングのあいだ遅くならないことは重要です、そして誰も遅れさせないでください。
+弾薬をゲットしたら下に降りて、あなたは陣地に帰らなければなりません。
+再び弾薬を必要とするまでホールドしてください。
+30発を切ったら弾薬補給のために走り始めてください。<br></li><li>このマップには6つの胆汁ジャーがあるので、安全に周回を走るために、行動不能のプレイヤーを救助に行くのに、また、AEDで蘇生に行くのに賢明にこれを利用してください。<br><br><div class="bb_h1">動画</div><br><li>73 Minutes by Eph<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/h5XcFAikjMI" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_003.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Survival - Motel 73:28.60&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 803		</div>
+		<div class="dynamiclink_description">
+			Video made by Azimuth: http://www.youtube.com/NupraptorGaming using 
+the demo of Eph: http://www.youtube.com/EphAir0 , and smoothing with 
+different games/players for the 3rd view parts.		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17451">
+				<div class="subSectionTitle">
+					Stadium Gate									</div>
+				<div class="subSectionDesc">
+<img src="files/a.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>この節はわずかに時代遅れです。
+屋根戦略においてAIの経路探索に問題があります、従ってチームは上に示される足場をホールドします... ［制作中］<br><br><b>アイテム</b><br><img src="files/a_013.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br><div class="bb_h1"><b>Rooftop</b></div><img src="files/aa.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a><b>ポジション</b><br>- 1プレイヤー、屋根上の左側 (A)<br>- 2プレイヤー、屋根上の中央 (BとC)<br>- 1プレイヤー、屋根上の右側 (D)<br><br><br><br><br><br><br>すぐに、チームはタンクから制圧されます、そしてあなたはAK-47固定武器に後退しなければなりません。<br><br><img src="files/a_024a.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a>4人のプレイヤーはリロードを避けるために固定武器に十分に近いままでいることができます。<br><br><br><br><br><br><br><br><br><b>注意</b><br><ul class="bb_ul"><li>屋根からあなたを引き下ろすかもしれないので、スモーカーに注意してください。<br></li><li>固定武器に近いときリロードする必要がないのでAK-47をばらまいてください。<br></li><li>撃つか、身をかわすことによって、岩を避けてください。<br><br><div class="bb_h1">動画</div><br><li>83 Minutes by Psy<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/u5zFqk5crXg" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_060.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2-Survival-Stadium Gate 83 min.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 473		</div>
+		<div class="dynamiclink_description">
+			Music: 1) Various Artists - Armin Van Buuren Feat. Sharon Den Adel - 
+In &amp; Out Of Love (Radio Edit). 2) Feint - Paradise Lost (VIP). 3) 
+Feint - New Beginnings.		</div>
+	</div></a>
+</div><br></li><li>64 Minutes by Rob (scaffolding strategy)<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/r30Zzb_-SC0" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_062.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival Stadium Gate 64mins&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 500		</div>
+		<div class="dynamiclink_description">
+					</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17452">
+				<div class="subSectionTitle">
+					Concert									</div>
+				<div class="subSectionDesc">
+<img src="files/a_011.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>[制作中] このマップで使うことができる非常に効果的な2つの戦略があります。
+
+1つは、全ての方向から感染者が押し寄せることにより、かなり大混乱するステージをホールドすることです、
+そして他方は、ステージ正面の野外観覧席+足場をホールドすることです。
+<br><br>
+通常感染者 (そして若干の特殊感染者) が登るのを妨害するために、あなたがはしごの上に座ることができるということを一部の人々は知っています、
+それで、通常感染者を殺すのを簡単にしながら彼らが重要な役割をつとめる点に私はちょっと注意したいです、そして、その重要な役割とはゲームを困難だがやりがいのあるものにする終りのない群れ+特殊感染者の組合せです。
+あなたは、このようにプレイすることによって、自分自身をだましているでしょう;
+
+感染者の音に聞き耳をたてて、疲労することなく押し進むために、プレイヤーは自分自身を訓練しなければなりません。
+<br><br>1人のプレイヤーはスナイパー固定武器の足場の上にいてどのハシゴもブロックしませんでした。
+3人の他のプレイヤーは、屋外観覧席の最上段にある2つの救急キットの近くでプレイしました。
+我々はラウンドの大部分をこのようにプレイしましたが、最初の9分間、我々はより良い特殊感染者カウントを願ってステージを守りました。
+
+1人のプレイヤーが群れから自由になり、タンク/特殊感染者に集中できるように
+通常感染者は2つの救急キット付近の手すりによって1カ所に絞られるかもしれません、一方、2人のプレイヤーは通常感染者を進入させないように取り組みます。
+
+<br><br><b>アイテム*</b><br><img src="files/item_concert.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+
+<div class="bb_h1">ポジション</div><br>(正面は屋外観覧席のトップからステージを向いて)<br><br><img src="files/a_008a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 1プレイヤー、足場の上、スナイパーをスパムして全周囲を撃つ (A)<br></li><li>
+ 1プレイヤー、右側手すりの上、右側に集中し、足場プレイヤーを守る (また、後ろ側と呼ばれる) (B)<br></li><li> 1プレイヤー、2つの救急キットの上、全周囲を撃つ (中央) (C)<br></li><li> 1プレイヤー、左側の手すりの上、左側に集中する (前側) (D)</li></ul><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li>
+ 後ろを守っているプレイヤーは、大部分のガス缶と花火を管理し (自販機の上に保存してある)、
+このプレイヤーはまた、何かが足場を登っているときには、足場プレイヤーに警告を出します、その上、時間があるならそれらを撃ちます。<br></li><li>
+ 中央のプレイヤーはあらゆる側を見て、すべての方向から来ているタンクを撃つのと同じくらい前側プレイヤーをたくさん援助します。<br></li><li>
+ 前側プレイヤーはたくさんの群れをくらいます、そして、たくさんのタンクは同様に前側に現れます。
+前側と足場プレイヤーが削るので、タンクが3人のプレイヤーに到達する頃には、タンクはたいてい倒れるはずです。
+前側プレイヤーも、彼らの側でガス缶と花火を配置します。<br></li><li> 屋外観覧席の3人のプレイヤーがスナイパー固定武器から弾薬をつかんで素早く彼らの場所に戻るので、すべてのプレイヤーはミリタリー・スナイパーライフルを使っています。<br></li><li> 足場プレイヤーは、最大速度の連射でマガジン全弾スパムを持続する、より強いスナイパーであることが求められます。<br></li><li>
+群れは狭く集中されなければならなくて、地上のプレイヤー達へ通過することを防がなければなりません。
+<br></li><li> 地上のプレイヤー達は、遠いステージの弾薬に向って走るのを防ぐために、主にミリタリー・スナイパーを利用しました。
+<br></li><li> プレイヤーがダウンした時、そのプレイヤーを安全に救助するために投擲武器を使用しなくっちゃ。
+<br></li><li> ガス缶は感染者の群れを殺すか、削れていないタンクに点火するすばらしい方法です。
+<br></li><li> 地上の中央プレイヤーは、大抵は群れをくらわないので、タンクと特殊感染者に集中し、可能な場合はそれと同時に群れを手伝わなければなりません。
+<br></li><li> タンクが足場を登る場合、手遅れにならないうちに足場プレイヤーに逃げるよう警告してください。
+<br></li><li> 新しいスナイパーライフルを取るのを弾切れになるまで遅らせないでください、最後のマガジンになった時、または、2体のタンクの後にゲットしてください。
+<br></li><li> タンクが来ている方向をコールすることはあなたに最高の結果を与ます、誰も混乱しないようにラウンドが始まる前にチーム独自の方位の呼び方を決めましょう。
+<br></li><li> 2人以上のプレイヤーが死んだ場合、2～3分伸ばすためにマップの外周を走り回ることは最高です。
+<br></li><li> たくさんのスピッターが足場プレイヤーを狙うので、酸がなくなるまで手すりの上にちょっと飛び乗ってください。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video light switch strategy by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/xZQVhNPPVYk" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_009.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 - New Concert 22:35 (Part 1)&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 130		</div>
+		<div class="dynamiclink_description">
+			Part 2: http://www.youtube.com/watch?v=ofmOZTrdcGY A run of the 
+concert after the new changes made to the map during the summer.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Licksore<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/3kLmBbKe-j8" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_024.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Concert 45 Minutes&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 646		</div>
+		<div class="dynamiclink_description">
+			North American Survivors getting 45 minutes on Concert in Left 4 Dead
+ 2. WR on August 6, 2012. Team: guyguy 
+(http://www.youtube.com/user/GuyGuyDead/videos) as Rochelle Lone Wolf 
+McQuade...		</div>
+	</div></a>
+</div><br></li><li> Highlight video tower defense strategy by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/Sj8mhVe9y_U" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_039.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Concert Tower Defense&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 764		</div>
+		<div class="dynamiclink_description">
+			We decided to revive an old strategy for the new concert map. 
+Players: Kev (Ellis), Clutch McDoogle (Coach), Lone Wolf McQuade 
+(Rochelle), GuyGuy (Nick) Song: Sanctum (Game) Soundtrack - Bridge...		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17454">
+				<div class="subSectionTitle">
+					Gator Village									</div>
+				<div class="subSectionDesc">
+<img src="files/a_024.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>大部分のアイテムがラウンド中の2分あたりに到着するはしけにあるので、このマップはユニークです。
+それらが使われたあと、救急キットは再び出現することも知られています。*(ページの最後に別の情報追加)
+最初の2分の間、ピクニック・テーブルでホールドして、M-16またはショットガンを使ってください。
+この時あなたの主な脅威は、即死を意味する水にチャージ、パンチすることができるチャージャーとタンクです！<br><br><b>アイテム</b><br><img src="files/a_021.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br><div class="bb_h1"><b>Barge</b></div><br><img src="files/a_021a.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a><b>ポジション</b><br>- 1プレイヤー、左のベンチ (A)<br>- 2プレイヤー、中央 (BとC)<br>- 1プレイヤー、右のベンチ (D)<br><br><br><br><br><br>すべてのプレイヤーは、はしけに置かれているスナイパーライフルを使います。
+スナイパーライフルの固定武器はほとんど足元にあり、リロードの必要はありません、弾薬を補充するためには新しい銃を拾ってください。プレイヤーは、絶えず撃っていなければなりません。動くものが見えたら撃ってください！
+<br><br>右側のプレイヤーは見通しがよいのでタンクに最も多くのダメージを与えます。
+他のプレイヤーは、ほとんどの場合視界をさえぎられます。<br><br>外側のプレイヤー (AとD) は最もスモーカーに狙われます、しかし、彼らははしけから引きずり出すことはできません。
+内側のプレイヤー達は、素早く彼らを押すか、スモーカーの舌を撃たなければなりません。
+外側のプレイヤー達はふつう岩のターゲットであるので、彼らは常にかわそう（誰でも念のためそうしなければなりませんが）としなければなりません。
+
+<br><br>
+タンクに点火することを悩まないでください;
+タンクがはしけに到達する前に、チームは彼らを撃たなければなりません、誰もが短い時間を使うことは重要です。
+スピッターにすぐに対処する必要があります、しかし酸をはしけ内に受けた場合はそれがクリアになるまで、はしけの反対側に行くかベンチの最上段に飛び乗ってください。
+<br><br><b>注意</b><br><ul class="bb_ul"><li>主な脅威：
+左と正面から来るタンク、スピッター、チャージャー、ジョッキー。
+<br></li><li>2体のタンクの場合、チームが最初の（最も近い）タンクに対処する間、右側のプレイヤーは第2のタンクを削ることができます。
+<br></li><li>最も左側のプレイヤーがスナイパーライフルに近いので、通常感染者の大部分を殺さなければなりません。通常感染者の多くは右側から来るので彼の射線を簡単に通ります。
+<br></li><li>岩を避けることは重要ですが、せまい場所で避けるのは難しいです。
+あなたは、はしけの柱に岩を投げつけるようにタンクを釣ってみることができます。
+<br><br><div class="bb_h1">動画</div><br><li>120 Minutes by Licksore<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/khCeNrLpnxU" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_008.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Gator Village 120 Minutes&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 367		</div>
+		<div class="dynamiclink_description">
+			North American Survivors getting 120 minutes on Gator Village in Left
+ 4 Dead 2. WR on July 26, 2012. Team: aTastyCookie as Coach guyguy 
+(http://www.youtube.com/user/GuyGuyDead/videos) as Rochelle...		</div>
+	</div></a>
+</div><br></li><li>73 Minutes by Psy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/pbl-3IpwzAw" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_041.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2-Survival-Gator Village 73 min.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 356		</div>
+		<div class="dynamiclink_description">
+			Music: 1)-Avril Lavigne - I Can Do Better (Instrumental). 2)-Blue 
+Stahli - Premeditated. 3)-Story Of The Year - Until The Day I Die.		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17457">
+				<div class="subSectionTitle">
+					Plantation									</div>
+				<div class="subSectionDesc">
+<img src="files/a_002.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>[制作中] 残念なことに、持ちこたえるための最高の場所は、機関銃でありません... ;-)<br><br>
+2階に立てこもります、そしてスピッターの酸から逃げる余地がないので、特別に素早く抹殺する必要があります。</b><br><br><br><br><br><br><b>アイテム</b><br><img src="files/a_003.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br><div class="bb_h1"><b>Stairwell</b></div><br><img src="files/a_011a.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a><img src="files/a_018a.jpg" class="sharedFilePreviewImage sizeThumb floatRight" alt="" title=""></a><br><b>ポジション</b><br>- 1プレイヤー、前側、ロングレンジ武器 (D)<br>- 3プレイヤー、後側、ショットガン (AとBとC)<br><br><b>注意</b><br><ul class="bb_ul"><li>よじ登っている間にタンクを殺すことができるように、後ろのプレイヤーはショットガンを使います。<br></li><li>スピッターの酸、およびタンクの出現位置のために、まれなことではありませんが、タンクが後ろ側に届いた場合、後ろ側プレイヤー達は彼らがタンクを釣る(ホールダンス)階段へ後退します。
+<br></li><li>後ろのプレイヤー達は、スピッターの酸とスモーカーに対して用心深くなければなりません。
+<br></li><li>タンクが前側を攻撃するとき、前側プレイヤーは3人の後側プレイヤーに通知しなければなりません。
+後側プレイヤーのうちの2人は、タンクを殺すのを援助するために階段に走ります。
+1人のプレイヤーは、後ろ側を守るために残ります。*(原文では前側を守るために残る)
+<br></li><li>前側プレイヤーが援助を必要とする場合、後側プレイヤーは床板を撃ち抜くことができます。
+</li></ul><br>この戦略の弱点の1つは、後ろのプレイヤー達がスピッターに弱いということです。
+唾を受けたときはいつでも、彼らは階段の方へ後退しなければなりません。
+<br><br><div class="bb_h1">ホールダンス</div><br>アトリウムのセーフルーム戦略で実行されるホールダンスと、プランテーションでのホールダンスは同一です。
+プレイヤーは穴の向こうを前後に歩きます。そして、タンクは彼の後を追いますが彼には届きません。
+タンクがどのプレイヤーを実際に追っているか（彼がホールダンスをしなければなりません）判断することが時々慎重を要します、そのうえ、時にはタンクの攻撃がかするかもしれません。<br><br><div class="bb_h1">弾薬ラン</div><br>弾薬は後側プレイヤーから廊下の向こうにあります。
+タンクによって分断されるかもしれないので、そして、特殊感染者はあなたを攻撃するために屋根から落ちてくる傾向があるので危険です。
+特殊感染者が待伏せにおいて落ちてくるのを防ぐために、屋根から見えないように、弾薬を取りに行っている間プレイヤーは壁に押し迫らなければなりません。
+<br><br>12:00以降は、タンクが生存者に届くまでに長い時間がかかるので、タンクが絶えず現れます。
+タンクを十分に速くキルしたなら、交戦に途切れができます、そして生存者は弾薬を取りに行くことができます。
+特に前側プレイヤーのために、利用できる余分の銃を持つことは役に立ちます、その人は弾薬から最も遠いです。
+<br><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/ogZwnKDkjCg" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_040.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Plantation Survival 21 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 383		</div>
+		<div class="dynamiclink_description">
+			L4D2 Plantation Survival 21 min Gold Miners Team Justin Time, Lone Wolf $ Cub, Guyguy, And Bob		</div>
+	</div></a>
+</div><br></li><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/UTiWp5i6C1Y" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_034.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Plantation Survival 18 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 156		</div>
+		<div class="dynamiclink_description">
+			L4D2 Plantation Survival 18 min Gold Miners Team Azimuth,KICKER, HtotheIzzle, and Bob		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17462">
+				<div class="subSectionTitle">
+					Sugar Mill									</div>
+				<div class="subSectionDesc">
+<img src="files/a_015.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>チームがアイテムを移動させない限り、このマップのラウンド途中でアイテムを取りに行くのがとても難しいので、あなたはダメージを避けるために最善を尽くさなければならないことになります！<br><br><br><br><br><br><br>
+
+<b>アイテム*</b><br><img src="files/item_sugarmill.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+
+<div class="bb_h1">ポジション</div><img src="files/a_005a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 1プレイヤー、弾薬のそば、SCARとショットガンスパム (A)<br></li><li> 2プレイヤー、トラックの後ろ、スナイパーライフル。
+一部の人々はここで、前側が中腰、その後ろに1人立ってプレイしますが
+前側の中腰プレイヤーが少し動くと後ろのプレイヤーの射線に入りフレンドリー・ファイアが問題となるようでした。
+なので、2人のトラック・プレイヤー達は中腰で横に並びました (BとC)
+<br></li><li> 1プレイヤー、後ろ側を見て後ろがクリアな時には前のタンクを手伝う (D)</li></ul><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li> 
+2体のタンクが近くまできたとき、我々は行き止まりまで後退しました。<br></li><li>
+ 前側の釣りプレイヤーが岩を避けることは重要です。
+かなりの頻度で岩が左側のタンクからくることに手を焼きました。<br></li><li> 後ろ側プレイヤーは、いくつかのかなり滑らかな動きをすることができます。彼女はコンクリートの角で円を描き彼女を追うようにタンクを操ることができます。
+彼女は上ってから下りて、また上って2～3回繰り返すことができます。
+前側にも対処するゾンビがいる場合、それは生存者にほんのわずかな時間を稼ぎます。
+<br></li><li>前側釣りプレイヤーは通常スピッターの酸をくらうのでダメージを受けないように遅れずに後退することと、2人のトラック・スナイパーが、前方からの特殊感染者と岩を彼に警告することはチームにとって非常に重要です。
+<br></li><li>時々、特殊感染者とタンクでさえ屋根から落ちてきます。
+<br></li><li>ヘルス・アイテムと投擲武器は後ろの行き止まりの角に動かして保管されました、これの前の試みでブーマーの爆発でアイテムが吹き飛ばされたからです。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/vFnDHQdnQgc" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_016.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Sugar Mill Survival 23 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 348		</div>
+		<div class="dynamiclink_description">
+			L4D2 Sugar Mill Survival 23 min Gold Miners		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Azimuth<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/nJAFrc2OLxc" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_057.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Sugarmill 44 mins.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 576		</div>
+		<div class="dynamiclink_description">
+			Team: phoenix_advance, HtotheIzzle, K I C K E R, and Azimuth (myself)
+ Just a quickie for the few people who actually watch my channel, to 
+show that it is indeed possible, and there's plenty of room...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Licksore<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/M6podR45cik" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_020.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Sugar Mill 87 Minutes&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 537		</div>
+		<div class="dynamiclink_description">
+			North American Survivors getting 87 minutes on Sugar Mill in Left 4 
+Dead 2. Team: aTastyCookie Domino Effect Lone Wolf McQuade 
+(http://www.youtube.com/user/rimrattler8/videos) and myself, Licksore.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Psy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/BUmRTeTAu6c" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_052.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2-Survival-Sugar Mill 40 min.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 337		</div>
+		<div class="dynamiclink_description">
+			Music: 1)-Senses Fail - Bite To Break Skin (The Legion Of Doom 
+Remix). 2)-Hatsune Miku - Be My Sacrifice. 3)-Avril Lavigne - My Happy 
+Ending (Instrumental Version).		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17465">
+				<div class="subSectionTitle">
+					Burger Tank									</div>
+				<div class="subSectionDesc">
+<img src="files/a_022.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br><br><br><br><br>
+
+<b>アイテム*</b><br><img src="files/item_burgertank.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">ポジション</div><img src="files/a_014a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 1プレイヤー、前側、左 (A)<br></li><li> 1プレイヤー、前側、中央 (B)<br></li><li> 1プレイヤー、前側、右 (C)<br></li><li> 1プレイヤー、煙突の上 (D)</li></ul><br>すべてのプレイヤーはスナイパーライフルを使いスナイパーの固定武器で弾薬を補充します。
+非常に難しいマップなのでプレイヤー全員はスナイパーライフルに熟達している必要があります。
+左側のプレイヤーは大部分の通常感染者の群れが左側を登るのを扱い、そのうえ建物の左側を登る特殊感染者にも気をつけます。
+他の前側プレイヤーは遭遇するゾンビに対処し、そのうえタンクを撃ちます。
+後ろのプレイヤーは、通常感染者が他のプレイヤーを後ろから攻撃しないように彼ら全員の世話をしています。
+後ろのプレイヤーは、後ろ側から来るまたはハシゴを上って来る特殊感染者のために後ろ側もまた見なければなりません。<br><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li> このマップには多くのヘルスアイテム特に救急キットがあります。
+控えめにヘルスを使う必要がありません。
+<br></li><li> バーガー・タンクは、12:00以降にすさまじい勢いのペースを持ちます。
+屋上の支配を保つことは非常に難しいです。
+<br></li><li> 非常事態のために取っておかれなければならない2つの胆汁ジャーがあります。
+<br></li><li> ガス缶は台なしにならない場所に保管しなければなりません。
+いくつかの良い場所は左側プレイヤーのそばの角、そして右側プレイヤーの脇です。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video downstairs strategy by Overdose<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/LTjNdvkwzRM" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_026.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Burger Tank   29min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 384		</div>
+		<div class="dynamiclink_description">
+					</div>
+	</div></a>
+</div><br></li><li> Highlight video by Licksore<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/cSx8keHi2qY" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_043.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 Survival - Burger Tank&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 251		</div>
+		<div class="dynamiclink_description">
+			This video shows a 16 minute run of burger tank in the team's attempt
+ to get 20 minutes. It shows the frantic pace required for survival on 
+Left 4 Dead 2's most difficult map.		</div>
+	</div></a>
+</div><br></li><li> Full video by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/PcJmkMIHMuA" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_047.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>YouTube™ の動画は非公開に設定されています。&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 0		</div>
+		<div class="dynamiclink_description">
+					</div>
+	</div></a>
+</div><br></li><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/BaSnmIghgHw" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_031.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Burger Tank Survival 20 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 408		</div>
+		<div class="dynamiclink_description">
+			L4D2 Burger Tank Survival 20 min Gold Miners		</div>
+	</div></a>
+</div><br></li><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/mxS-5URhX7s" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_030.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Burger Tank Survival 14 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 247		</div>
+		<div class="dynamiclink_description">
+			L4D2 Burger Tank Survival 14 min Gold Miners Team Snookray, Azimuth, Arkron, and Bob		</div>
+	</div></a>
+</div><br></li><li> Full video by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/oIR9-05vZJg" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_029.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 - Burger Tank 21:18 (Part 1)&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 133		</div>
+		<div class="dynamiclink_description">
+			Part 2: http://www.youtube.com/watch?v=sMdhhla6i1E Full run on burger
+ tank using the rooftop strategy started by the European players. We 
+used all the supplies.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by AnGeR<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/YDmKS65Zork" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_010.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 Survival BurgerTank 20 min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 334		</div>
+		<div class="dynamiclink_description">
+			Playing Left 4 Dead 2 in Survival mode on BurgerTank without moving 
+suplies 20.42.17 1 player on the roof (Sniper spam) 1 player spam m16 
+(That's me now) 1 player on the left windows with shotgun...		</div>
+	</div></a>
+</div><br></li><li> Highlight video side of building strategy by Azimuth<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/9hBnLEoYrbg" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_038.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Burgertank 17mins // Kicker's 'Car'-ma.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 322		</div>
+		<div class="dynamiclink_description">
+			Team: K I C K E R, Ironmonkey21, phoenix_advance, and Azimuth 
+(Myself). Arguably the hardest official L4D2 survival map. Nothing 
+great, just fun. Songs: 1. Next Level Pope - Popular Computer 2.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Karl Pilkington<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/MiSiWO-aubs" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_007.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival Burger Tank 30mins&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 1,062		</div>
+		<div class="dynamiclink_description">
+			We finally got 30mins on Burger Tank with this 2 and 2 strategy. The 
+idea is to try to split the tanks between two teams while using a player
+ on the chimney to drag commons to a choke point.		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17467">
+				<div class="subSectionTitle">
+					Bus Depot									</div>
+				<div class="subSectionDesc">
+<img src="files/a_014.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>
+このマップには、すべての正面攻撃に免疫があり背中を撃たなければならない暴動鎮圧隊員ゾンビが出現します。彼らは時々警棒を落とします。この戦略の弱さは、プレイヤーがフェンスまたは足場から落ちたとき、戻るのが困難だということです。<br><br>
+
+<b>アイテム*</b><br><img src="files/item_busdepot.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<img src="files/a_025a.jpg" class="sharedFilePreviewImage sizeThumb floatLeft" alt="" title=""></a><img src="files/a_009a.jpg" class="sharedFilePreviewImage sizeThumb floatRight" alt="" title=""></a><br><b>ポジション</b><br>- 1スナイパー、足場の上、後方を見る (A)<br>- 1スナイパー、照明の上、スナイパーライフル固定武器のとなり (B)<br>- 1スナイパー、足場の反対端、屋根を見る (C)<br>- 1プレイヤー、フェンスの上、前方を見る (D)<br><br>後方と照明のスナイパー達は、その他の2人のプレイヤーからのわずかな支援で後ろからのタンクに対処できなければなりません。
+彼らにはまた、タンクがすぐそばにきたときサプレッサー付きサブマシンガンを使う選択がありますが、タンクが遠く離れている間にダメージを与える大部分の時間のためにスナイパーを利用するべきです。<br><br>フェンスのプレイヤーは最も難しいポジションです。
+彼／彼女はタンクを釣って、岩を避けたり打ち落としたりすることに熟練していなければなりません。
+岩を避けるために、彼／彼女はタープの上に走らなければなりません。
+このプレイヤーがスモーカーの舌を切ることができる近接武器を使うことはよい場合があります。
+このプレイヤーはフェンスの上を渡ってタープの上へ歩き、足場に居るプレイヤーAとBのそばにあるスナイパー固定武器から弾薬を回収します。<br><br>足場の上のプレイヤー達はチャージャーとスモーカーを素早く排除しなければなりません。<br><br><b>注意</b><br><ul class="bb_ul"><li>すべてのプレイヤーは、弾薬を補充するために、スナイパーの固定武器を使います。<br></li><li>足場の上のプレイヤーの主要な脅威：
+チャージャー、ジョッキー、スモーカー、タンク。<br></li><li>フェンスの上にいるプレイヤーの主な脅威：
+ジョッキー、スモーカー、タンク（そして、彼らが放り投げる岩）。<br></li><li>プレイヤーをはさむダブル・タンクの場合、プレイヤーは、最も近いタンクに集中して、最初にそれを殺す必要があります。<br></li><li>ダブル・タンクのあいだプレイヤーの焦点が2つのタンクの間で分かれてしまうという理由で、良いコミュニケーションはこの戦略にとって不可欠です、。<br></li><li>統計によると後ろ側のプレイヤーがタンクへのダメージの主力です。<br></li><li>チームメイトが倒れるか、ポジションから引き落とされた場合、回復するために投擲武器を使ってください。<br></li><li>特殊感染者は時々、細い路地を通って後ろ側から前側へ移動します。
+この場合、後ろのプレイヤーは警告をします。<br><br><div class="bb_h1">動画</div><br><li>91 Minutes by Licksore<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/TpgEeKEWAFU" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_042.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Bus Depot 91 Minutes&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 605		</div>
+		<div class="dynamiclink_description">
+			North American Survivors getting 91 minutes on Bus Depot in Left 4 
+Dead 2. Team: guyguy (http://www.youtube.com/user/GuyGuyDead/videos) 
+Lone Wolf McQuade...		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17470">
+				<div class="subSectionTitle">
+					Bridge									</div>
+				<div class="subSectionDesc">
+<img src="files/a_027.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>これはLeft 4 DeadとLeft 4 Dead 2のすべてのマップの中でプレイするのが最も簡単なマップです。
+無期限に続けることができます。
+疲労が原因によりラウンドを終わりましたが、ここでプレイヤーが最後までもちこたえた最も長いものは5時間です。<br><br>20分より長く続けることができるなら特殊感染者の量が減少することは目にみえて目立ちます。
+これは、彼らがマップの遠い角で行き詰まって動けないからです。
+このために、マップは、あらゆるサバイバル・マップと同じように時間とともにゆっくりと容易になり、人々は無期限にこのマップの上で持ちこたえることができます。<br><br>
+
+<b>アイテム*</b><br><img src="files/item_bridge.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">ポジション</div><br><img src="files/a_006.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br>すべてのプレイヤーは上層の床のM-16固定武器のそばに一列に並びます。<br><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li>
+ この戦略に必要である唯一の武器はM-16です。
+グレネードランチャー、SCARs、その他のような余分な武器を下層から上げる必要はありません。
+上層のM-16は無制限の弾薬を持っています(固定武器なので)そして連続的にスプレーされている間それは強力です。<br></li><li> 戦略が簡単で単純ですが、それでもあまりにたくさんの不必要なダメージを受けないように注意しなければなりません。
+大半の時間、弾薬のそばから動きませんがそれでも酸、チャージャー、岩を避けるためにプレイヤーは移動しなければなりません。<br></li><li> 
+後ろ側のチェック専門のプレイヤーが1人いるべきです。
+通常感染者が後ろ側から来ることは多くありません、しかし前部プレイヤーが混乱を引き起こす前にクリアされる必要があります。
+また、タンクは後ろ側から来るかもしれません。
+このケースではプレイヤーが前側のウェーブに集中し続けることができるように、後ろのタンクは素早く対処されなければなりません。<br></li><li> 或るケースでは、例えば、2体のタンクによって攻撃されて、生存者は圧倒され始めます。
+このケースでは、テントへ退いて、タンクを仕上げてください。
+あなたは、弾薬を得るために固定武器へ戻らなければなりません。<br></li><li> プレイヤー全員のポジションから固定武器に届くようにしてください。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/YQyJ8lmjtzs" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_055.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Bridge Survival 67 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 1,496		</div>
+		<div class="dynamiclink_description">
+			L4D2 Bridge Survival 67 min Gold Miners Team Azimuth, HtotheIzzle, Arkron, and Bob		</div>
+	</div></a>
+</div><br></li><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/6sgSjWUe7zM" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_014.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Bridge Survival 50min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 917		</div>
+		<div class="dynamiclink_description">
+			Left 4 Dead 2 Bridge Survival 50min Gold Miners Our latest game was 67 min http://www.youtube.com/watch?v=YQyJ8lmjtzs		</div>
+	</div></a>
+</div><br></li><li> Highlight video by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/U18rfnrrlYU" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_012.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Bridge&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 231		</div>
+		<div class="dynamiclink_description">
+			After staying on the bridge for 69 minutes, Nick, Coach and Rochelle 
+decide life's not worth living. Players: trash4cash (Coach), Kev 
+(Rochelle), Lone Wolf McQuade (Ellis), sauce (Nick) song: Bach -...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Azimuth<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/GLe0YP1iHG0" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_013.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Bridge 3 Hours // Broken Count.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 546		</div>
+		<div class="dynamiclink_description">
+			New record is 306:03.13. Team: K I C K E R, HtotheIzzle, 
+phoenix_advance, and Azimuth (myself). Song: Everyday could be our last -
+ Rex the Dog.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Psy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/qsBA-uRW4Uk" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_056.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2-Survival-Bridge 112 min.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 1,524		</div>
+		<div class="dynamiclink_description">
+			Music: 1)-30 Seconds to Mars - From Yesterday (Instrumental). 
+2)-Brand X Music - Freestyle. 3)-30 seconds to mars - Savior 
+(instrumental). Team: Nick-Psych1c Su1c1de. Ellis-Snookray.		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17473">
+				<div class="subSectionTitle">
+					Riverbank									</div>
+				<div class="subSectionDesc">
+<img src="files/a_010.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br>特別な生存者ゾンビによって余分の救急キットがドロップされます。<br>
+ページ最後のコメント欄にSurvivor Zombie追加情報があります。ぜひ読んでみてください。*<br><br>
+
+<b>アイテム*</b><br><img src="files/item_riverbank.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+
+<div class="bb_h1">ポジション</div><br><img src="files/a_003a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 3スナイパー、後ろの垣根に沿って (AとBとC)<br></li><li> 1ショットガンかM-16、釣り (D)</li></ul>釣りプレイヤーははるかに前方の、見晴らし台の狭まった地点の近くに置きます。<br><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li>
+ 釣りプレイヤーには最も難しい仕事があって、スナイパーから強いバックアップを必要とします。
+スナイパーのサポートを受けるので、彼女はチームの近くでプレイする必要はなく狭まった地点の近く、はるか前方に位置します。<br></li><li> タンクが左側からまたは右側からくるとき、スナイパーのうち2人は素早くタンクを殺しに移動します。釣りプレイヤーを援護し続ける1人のスナイパーは残らなければなりません。<br></li><li> 後ろのプレイヤーは釣りプレイヤーをサポートするために投擲武器を使い、狭まった地点の方へガス缶を送ります。</li></ul><br><div class="bb_h1">釣り戦略</div><br>タンクに直面しているとき、釣りプレイヤーはタンクを避けるためにいくつかの選択があります。<br><ul class="bb_ul"><li> あなたがバックアップされていて、進路に障害物がないことを確認してください。<br></li><li> テントに着くためにスピーカーに飛び乗ることができます、そしてタンクをよじ登らせます。<br></li><li> 垣根の上に、そして、垣根の後ろのフェンスの上にさえ飛び乗ることができます。そしてタンクをよじ登らせます。<br></li><li> タンクにあなたを追わせるために木のまわりを走ることができます。
+しかしこれは達成するのが時々難しいです。</li></ul><br><div class="bb_h1">弾薬補給戦略</div><ul class="bb_ul"><li> 最大12分間、通常の時間に弾薬ランできます。<br></li><li>
+ 12:00以降は安全なときに弾薬をゲットします。
+それはタンク出現の波の谷間がいつなのか判断するのが難しいです、しかしその時がきたら、生存者は素早く見晴らし台（必要に応じて投擲武器を使う）に走り弾薬を補充しなければなりません。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/vadV3zDuiAI" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_002.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Riverbank Survival 20 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 475		</div>
+		<div class="dynamiclink_description">
+			L4D2 Survival Riverbank 20 min Gold Miners. The weapon spawns can be 
+moved on this map. Use a gas can and throw it at the weapon spawn.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Karl Pilkington<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/w1atZiLGsJs" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_018.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival Riverbank 68min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 506		</div>
+		<div class="dynamiclink_description">
+			Holding the back tents on riverbank from the bait's perspective. The 
+main job for the guy with the shotgun is to protect the snipers from 
+common and be the target for tank rocks.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Overdose<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/ytaHLTlvfx0" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_032.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 dead 2 - Survival - Riverbank - 47min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 432		</div>
+		<div class="dynamiclink_description">
+			Team : Karl Pilkington - kris - Overdose - Toshly We used only 7 kits
+ :) (2 reasons : first we were unlucky, not a single zombie gave us a 
+kit and second its written 8 on the stats page but a small...		</div>
+	</div></a>
+</div><br></li><li> Full video gazebo strategy by sauce<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/-N-b1yqbywc" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_019.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 Survival Gold - Riverbank (22:53) Part 1/2&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 396		</div>
+		<div class="dynamiclink_description">
+			Left 4 Dead 2 survival mode on the map Riverbank. Team: 3 front 
+snipers, Guyguy, Kev, Lone Wolf McQuade, and back guard shotgun Sauce. 
+Strategy: Hold the gazebo as long as possible.		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17474">
+				<div class="subSectionTitle">
+					Underground AKA Bedlam									</div>
+				<div class="subSectionDesc">
+<img src="files/a_009.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>ページ最後のコメント欄にSurvivor Zombie追加情報があります。ぜひ読んでみてください。*<br><br><b>アイテム*</b><br><img src="files/item_bedram.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">ポジション</div><br><img src="files/a_010a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br>建設フェンスによって仕切られる角にプレイヤーはすし詰めになります。
+ポジションはほぼ以下の通りです：<br><br><ul class="bb_ul"><li> 1プレイヤー、水量計の上に立つ (A)<br></li><li> 1プレイヤー、フェンスの上に立つ (B)<br></li><li> 2プレイヤー、めいいっぱい後退 (CとD)</li></ul><br>すべてのプレイヤーはスナイパー・ライフルを使います。<br><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li> スナイパー達は、タンクが届く前に殺すことができる必要があります。
+一旦タンクがプレイヤーに届くならそれは壊滅的でありえます。<br></li><li>
+ スピッターの酸を避けるためにプレイヤーの1人は他より前方遠くに置かれます。
+前側プレイヤーは酸を避けるために水量計に飛び乗ることができます。<br></li><li> 弾薬はすぐ近くです、弾薬ランはタンクの波の谷間で行います。<br></li><li> 前側プレイヤーは、下からのスモーカーに注意しなければなりません。<br></li><li>
+そのうち、余分の救急キットをドロップする生存者ゾンビが現れます。
+余分の救急キットを回収できるように、生存者ゾンビを引きつけてから殺すのをスナイパーは待たなければなりません。<br></li><li>
+ この位置でタンクの岩を避けるのは難しいです。
+岩はフェンスを通り抜けます。
+タンクが岩を投げるとき釣られて失敗するように、生存者は小さな動きをしなければなりません。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/95RfuaKa0g0" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_025.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Underground/Bedlam Survival 60 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 340		</div>
+		<div class="dynamiclink_description">
+			L4D2 Underground/Bedlam Survival 60 min Gold Miners Team Arkron,Scatterskin,Jmon, and Bob		</div>
+	</div></a>
+</div><br></li><li> Highlight video bar strategy by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/kBKZZCmjFmk" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_061.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 - Smash the Underground&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 124		</div>
+		<div class="dynamiclink_description">
+			A fun game holding the bar of the underground map. Players: Arkron 
+(Ellis), Lone Wolf McQuaid (Rochelle), Domino Effect (Nick), guyguy 
+(Coach) Songs: Green Carnation - Falling into Darkness Green...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by AnGeR<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/2164mulFzJY" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_021.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Survival - Underground 52:40:17 by AnGeR&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 410		</div>
+		<div class="dynamiclink_description">
+			Playing L4D2 in survival mode on the Undeground map. Team was: 
+JeNoCiD- Rochelle Tigga - Nick (first time played this tactic) Eph-Air -
+ Ellis AnGeR - Coach Music: Netsky - Everyday Adele - Hometown...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by 24CaratSurvival<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/3cvPCgC0Sao" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_044.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>The Perils of Rochelle in The Passing Underground&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 361		</div>
+		<div class="dynamiclink_description">
+			"Drop back!? I've been on this case for 3 months. Alright I'm going 
+around ..." A holdout strategy independently invented and constantly 
+pursued by phoenix_advance when trying to beat his 37 minute...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Overdose<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/uiun0JFPzaQ" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_027.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 dead 2 - Survival - Underground - 186min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 409		</div>
+		<div class="dynamiclink_description">
+			Team : Karl Pilkington, kris, OSwald BB, Overdose This is a 11min 
+extract of the round, double speed. You can see at 3min10 on the video 
+(100min in the round) that a spitter bug happened on the back...		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17478">
+				<div class="subSectionTitle">
+					Port (Passing)									</div>
+				<div class="subSectionDesc">
+<img src="files/a_007.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>ほとんど同一であるマップの2つのバージョンがありますが、異なる戦略を使用します。
+港のこのバージョンにおいて生存者はより多くの救急キットを供給されます、そして1つの弾薬だけがあります。<br><br>
+<b>アイテム*</b><br><img src="files/item_portP.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">倉庫戦略</div><br><b>ポジション</b><br><br><img src="files/a_004a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 1プレイヤー、箱の上、釣り (A)<br></li><li> 3プレイヤー、壁に張り付いて (BとCとD)</li></ul><br><b>注意</b><br><br><ul class="bb_ul"><li>
+ 釣りプレイヤーにははるかに難しい仕事があります。
+彼がミスのためにヘルスの全てを失うことは、非常に簡単です。
+チームの複数の人々が釣り係の経験があるならこの位置はプレイヤーの間で交代するべきです。
+<br></li><li> 釣りプレイヤーは壁に体を押しつけることまたは箱の外に張り出すことによってスピッターの酸を避けなければなりません。
+或るケースでは、これはうまくいかずに酸は箱の上に落ちるかもしれません。
+その場合、釣りプレイヤーは速くボックスを去らなければならなくて壁に張り付いた他の生存者と合流しなければなりません。
+<br></li><li> 釣りプレイヤーは、スモーカーを素早く殺すことによって、または、舌を柱で妨害することによって引かれるのを避けようとすることができます。
+<br></li><li> 釣りプレイヤーはできればタンク岩を避けるか、柱のどれかに当てて岩を壊そうとしなければなりません。
+<br></li><li> 比較的感染者が少ないとき、プレイヤー達はピストルを使おうとするべきです。
+これは弾薬を節約することができるということです。
+<br></li><li> 弾薬ランは危険なので、できるだけ避けたいです。
+12:00以降、弾薬ランは非常に難しいです。
+<br></li><li> ブーマーが倉庫の2階で弾薬補給に行く生存者をいつも待っています。
+釣りプレイヤーが正しく自分自身を置くことができるならブーマーに気づくことができ天井を抜いて撃つことができます。
+弾薬ランの間にブーを食らったなら弾薬ランは危険になります。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/txsfCU4kXDQ" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_023.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Passing Port Survival 20 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 193		</div>
+		<div class="dynamiclink_description">
+			L4D2 Passing Port Survival 20 min Gold Miners Players Sauce,Kev,guyguy, and Bob		</div>
+	</div></a>
+</div><br></li><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/EqItOoMZu2o" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_051.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Passing Port Survival 16 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 175		</div>
+		<div class="dynamiclink_description">
+			L4D2 Passing Port Survival 16 min Gold Miners		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17481">
+				<div class="subSectionTitle">
+					Traincar									</div>
+				<div class="subSectionDesc">
+<img src="files/a_012.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><b>アイテム*</b><br><img src="files/item_traincar.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+
+<div class="bb_h1">ポジション</div><img src="files/a_026a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 2プレイヤー、左ボートの上 (AとB)<br></li><li> 2プレイヤー、右ボートの上 (CとD)<br></li><li> 12分を過ぎて、持ち場は固定されません</li></ul><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li> われわれは中央にある2艇のボートの上に位置します。ボートが壊れる時のダメージを受けないように注意する必要があります。<br></li><li>
+ タンク/通常感染者で忙しい時マップの角へ後退します (この角は、L4D1 traincarで一般に使われる場所です)<br></li><li>
+ 我々は、このプレイの間、胆汁ジャーを適度にゲットしました。
+胆汁ジャー落下はランダムです;
+時々、あなたは最初の12分の間に12個以上の胆汁ジャーを集めることができます。<br></li><li> 胆汁ジャー効果はおよそ20秒もちます。
+それは通常感染者の群れと特殊感染者からの負担を軽減することができます。<br></li><li>
+ この試みにおいて我々は弾薬の近くの地上に胆汁ジャーを放り投げました。
+その理由は、1つの点にゾンビを吸い上げより多くの胆汁ジャーを集めるためです。
+もう一つの可能性はタンクに胆汁ジャーを投げることです。
+<br></li><li> レーザーサイトとAK-47は非常に強力で高精度です。
+ゾンビを殺すには1発です。
+<br></li><li> 通常感染者の群れを引くために、1人の指定されたプレイヤーが大部分の胆汁ジャーを投げました。
+それによりまた我々はより多くの胆汁ジャーを集めました。
+<br></li><li> 私が覚えているなら、我々は12:00以前に適度な量の胆汁がありましたが、12:00以降に絶えず続く供給を得ました。
+<br></li><li> 時折、胆汁ジャーは危険な時にタンク投げられました。
+<br></li><li> 我々はタンクが接近したので角へ退きましたが、この間にフレンドリー・ファイアの問題を抱えていました。
+<br></li><li> 岩を避けることでヘルスを維持しタンクからの損害を最小限にしました。
+<br></li><li> 赤いヘルスまで回復をがまんしました。
+我々は12:00までに、およそ1つまたは2つの救急キットを使いました。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/PfKR_vVbeeU" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_045.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Train car Survival 19 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 493		</div>
+		<div class="dynamiclink_description">
+			L4D2 Train car Survival 19 min Gold Miners		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Overdose<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/sAcy2mLk0_s" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_022.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 dead 2 - Survival - Traincar&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 255		</div>
+		<div class="dynamiclink_description">
+			First time for me trying to make an intro. Good round but still huge improvement possible!		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Overdose<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/tQDYjsqaptc" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_005.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 dead 2 - Survival - Traincar - 25min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 132		</div>
+		<div class="dynamiclink_description">
+			Team : JeNoCiD - NakeD - Overdose - Tim Below A very fun round on one
+ of my favorite map, we had found and collected only 9 biles at 15min 
+and we didnt think this would be a good run when JeNoCiD...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Karl Pilkington<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/gTsa4tvX_Fs" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_054.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival Traincar 54min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 490		</div>
+		<div class="dynamiclink_description">
+			The best strategy with bile seems to be to use one as soon as the 
+last bile runs out from 12mins onwards. You can often get 2 or 3 bile 
+zombies from one bile use but you can also face long stretches...		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17493">
+				<div class="subSectionTitle">
+					Port (Sacrifice)									</div>
+				<div class="subSectionDesc">
+<img src="files/a_005.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><b>アイテム*</b><br><img src="files/item_portS.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">ポジション</div>正面は、バーの下の階へ向いて。<br><br><img src="files/a_002a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 1プレイヤー、前側、左 (A)<br></li><li> 1プレイヤー、前側、中央 (B)<br></li><li> 1プレイヤー、前側、右 (C)<br></li><li> 1プレイヤー、後ろ側 (D)</li></ul><br><div class="bb_h1">注意</div><ul class="bb_ul"><li> 胆汁ジャーを集めるために最初の12分の間ホールドします。
+周回ランニングは12:00以降に起こります。
+<br></li><li> 前側プレイヤー達が正しいポジションなら正面からのタンクは常に二階までよじ登り格好の標的となります。
+<br></li><li> 後ろ側プレイヤーは、屋根から落ちてきたり、そばのフェンスを上る特殊感染者に注意しなければいけません。
+部屋の外に出たくなることがありますが、チームメイトがあなたを救うことが困難な外に行くことは危険です。
+<br></li><li> 3人のプレイヤーはタンクを撃つようにして、1人のプレイヤーは残りのサイドをカバーします。
+カバーするのを助けるために火を使うことは非常に役に立ちます。
+<br></li><li> 周回は、タンクに胆汁ジャーを投げビリヤード室からスタートします通常後ろ側から出ます。
+<br></li><li>
+ 一旦全員が2つ目の建物(倉庫)に集まったらタンクを待ちかまえて、ビリヤード室に帰るために胆汁ジャーを再びタンクに投げます。
+周回ルートで追加の胆汁ジャーを見つける十分な可能性があります。<br></li><li> 胆汁ジャー無しでランする場合パイプ爆弾を代わりに使ってください。<br></li><li> 後ろ側プレイヤーは12:00までに1つの救急キットを使わなければならないかもしれません。
+残りの救急キットは周回ランニングの間に使われなければなりません。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Highlight video by Licksore<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/H_NCf64LU0A" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_049.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival - Port (The Sacrifice) 28 Minutes&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 450		</div>
+		<div class="dynamiclink_description">
+			North American Survivors getting 28 minutes on Port (The Sacrifice) 
+in Left 4 Dead 2. Team: aTastyCookie as Louis Lone Wolf McQuade 
+(http://www.youtube.com/user/rimrattler8/videos) as Francis...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by guyguy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/HTavXC9RGaY" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_011.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 - Sacrifice Port&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 242		</div>
+		<div class="dynamiclink_description">
+			This video shows us surviving 20 minutes on the Port map with some 
+Japanese players. We held out at the bar for the first 12 minutes, which
+ is a well-known strategy.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by AnGeR<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/Sff4WpVxnvA" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_006.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left4Dead2 - Survival - Sacrifice Port 21:08.77&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 283		</div>
+		<div class="dynamiclink_description">
+			Playing survival mode in Port Sacrifice with some friends. Music: 1- 
+Netsky - Your way 2- Netsky - Young and foolish -AnGeR-		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17485">
+				<div class="subSectionTitle">
+					Generator Room									</div>
+				<div class="subSectionDesc">
+<img src="files/a_019.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br>マップに不具合があるので多くの特殊感染者は長いゲームの間に到達できない場所でスタックします。
+動けなくなっているスピッターはあなたのチームを大いに援助します。
+しかし我々は特殊感染者カウントは十分に妥当であると思います。<br><br>
+
+<b>アイテム*</b><br><img src="files/item_Groom.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">ポジション</div><br><img src="files/a_017a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><img src="files/a_022a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 2プレイヤー、前側<br></li><li> 2プレイヤー、後ろ側、手すりに張り付く</li></ul><br><div class="bb_h1">注意</div><br><ul class="bb_ul"><li>
+ このマップはレーザーサイトか特殊弾のどちらか一方が出現します。
+レーザーサイトは正確さを増してAK-47を非常に強力にします、一方、特殊弾は必要に応じて予備の救急キットを上の階へ動かすことができます。
+レーザーサイトを使うと予備の救急キットを使うよりもヘルスを確保できるようです。
+<br></li><li> スピッターの酸を跳ね返すように後ろのプレイヤー達は手すりに対して張り付きます。
+スピッターがスタックしたあと、我々はこれについて心配する必要はありませんでした。
+<br></li><li> 1階のタンクは後ろのプレイヤーに岩を投げつける傾向があります、そして上階のタンクは前側プレイヤーに岩を投げつける傾向があります。
+岩による損害を避けるようにプレイヤー達はポジションを決める必要があります。
+<br></li><li> 2体のタンクの場合、我々はだいたい後ろの2人のプレイヤーが第2のタンクに集中する間、2人の前側プレイヤーが最も近いタンクに集中しました。
+<br></li><li> 時折、タンクは後部で出現するか、窓から飛び込んで後部へ通り抜けます。
+これらのタンクは全く危険で素早く対処しなければなりません。<br></li><li> 弾薬が切れないように都合の良い時に頻繁に弾薬に行きました。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/HGcJMYD1Zwc" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_058.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Generator Room Survival 32 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 471		</div>
+		<div class="dynamiclink_description">
+			L4D2 Generator Romm Survival 32 min. Gold Miners Awsome game with Azimuth, KICKER, Pig Dog, and Bob.		</div>
+	</div></a>
+</div><br></li><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/jcBzUfjWym4" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_050.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Generator Survival 23 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 327		</div>
+		<div class="dynamiclink_description">
+			L4D2 Generator Survival 23 min Gold Miners		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Psy<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/N2p-v57BR1o" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_033.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2-Survival-Generator Room 48 min.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 236		</div>
+		<div class="dynamiclink_description">
+			Music: 1) Feint - Vision Driver. 2) Blue Stahli - Leadfoot Getaway. 3) Feint - Skyward.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Azimuth<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/JEvwC7lOZak" target="_blank">
+	<img class="dynamiclink_preview" src="files/1.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Generator Room (L4D2) 70 mins.&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 378		</div>
+		<div class="dynamiclink_description">
+			Team: phoenix_advance, K I C K E R, WaRLo, and Azimuth (myself). Just
+ a quickie, basically to show how we do it differently from other 
+people. The end shows basically shows the cause of the low S.I.		</div>
+	</div></a>
+</div><br></li><li> Full video by Karl Pilkington<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/6kUGSvE0YTc" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_036.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Generator Room 49 mins&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 302		</div>
+		<div class="dynamiclink_description">
+					</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+						<div class="subSection detailBox" id="17490">
+				<div class="subSectionTitle">
+					Rooftop									</div>
+				<div class="subSectionDesc">
+<img src="files/a_017.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><div class="bb_h1">周回戦略</div><br>この戦略では、プレイヤーはマップの外の範囲に沿って走ります。
+時計回りに、または反時計回りに両方の方向で周回することができます。
+マップにバグがあり、生存者を追ってタンクと他の特殊感染者はやがてスタックするので、この方法は通常軽く見られます。
+周回が原因で現れるスピッターのおしおき酸が時折あります、その場合にはサバイバル時間はラウンド終了後に記録されないかもしれません。<br><br>
+
+<b>アイテム*</b><br><img src="files/item_rooftop.jpg" class="sharedFilePreviewImage sizeOriginal floatLeft" alt="" title=""></a><br><br><br><br><br><br><br>
+
+<div class="bb_h1">固定ショットガン戦略</div>この戦略はLeft 4 Deadのポジションとほとんど同じポジションを使います。<br><br><b>ポジション</b><br><br><img src="files/a_020a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 2プレイヤー、固定ショットガンのそば (AとB)
+<br></li><li> 1プレイヤー、固定ショットガンのそば、後側を見る (C)<br></li><li> 1プレイヤー、ミニガン建物の上 (釣り) (D)</li></ul><br>AK-47がとても強力なので、AK-47使用が推奨です。また、固定ショットガンも利用できますが釣りプレイヤーを助けて、遠くからタンクと特殊感染者を扱うにはショットガンの射程は不適当です。<br><br><b>注意</b><br><br><ul class="bb_ul"><li>
+タンクの注意を他のサポート・プレイヤーからそらすために釣りプレイヤーはミニガンを使う必要があります。
+しかしこの場所は釣りプレイヤーにとって非常に危険です。
+サポート・プレイヤーは強いバックアップを提供して、速くタンクに対処する必要があります。<br></li><li> 周回戦略は時折、非常に悪い状況から立ち直るのに用いることができます。
+プレイヤー達はおよそ1ラップを完了し、それから彼らのポジションを取り戻すために戦うでしょう。<br></li><li> 通常感染者は後ろ側からめったに攻撃しません。
+後ろ側を見ているプレイヤーは後ろ側がクリアなとき注意を前側に回すことができます。</li></ul><br>
+
+<div class="bb_h1">背面戦略</div><br><b>ポジション</b><br><br><img src="files/a_007a.jpg" class="sharedFilePreviewImage sizeThumb inline" alt="" title=""></a><br><br><ul class="bb_ul"><li> 3人、孤立した台の上 (AとBとC)<br></li><li> 1人、2つの空調装置の間を移動 (釣り) (D)</li></ul><br><b>注意</b><br><br><ul class="bb_ul"><li> この戦略のバリエーションは空調装置の上で2人のプレイヤーを使用することです。
+この戦略も効果的です。<br></li><li> 攻撃してくる通常感染者の量が非常に圧倒的でありえるという点で、この戦略には若干の問題があります。<br></li><li>
+ 孤立した台の上に居る後側のプレイヤー達は、入って来るハンターとチャージャーに非常に慎重でなければなりません。まずはじめに、大部分の特殊感染者は釣りプレイヤーを攻撃している必要があります。
+やつらが後ろのプレイヤーを攻撃するとき、プレイヤー達はよろけて台から落とされるかもしれません。<br></li><li>
+ スモーカーとスピッターが台の上の生存者を攻撃し始めるとき問題を含みます。
+やつらが生存者に損害を与えるチャンスを得る前に殺すように、後側のプレイヤー達は非常に鋭く警戒しなければなりません。</li></ul><br><div class="bb_h1">動画</div><br><ul class="bb_ul"><li> Full video by Bio Hazzard Bob<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/WcMoX5z-2F0" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_046.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Rooftop Survival 11 min Gold Miners&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 573		</div>
+		<div class="dynamiclink_description">
+			Left 4 Dead 2 Rooftop Survival 11 min Gold Miners		</div>
+	</div></a>
+</div><br></li><li> Highlight video by AnGeR<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/rcOzKt80ZvY" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_015.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Survival - Roftop 22 min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 424		</div>
+		<div class="dynamiclink_description">
+			Playing L4D2 with some friends on Roftop in survival mode. No moving 
+suplies. This is one of the 2 hardest maps in this game.		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Overdose<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/xfQD_2zq-3g" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_028.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2 - Survival - Rooftops 22min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 501		</div>
+		<div class="dynamiclink_description">
+			Team : kris - Karl Pilkington - Overdose - Toshly Our best round so 
+far, (quite proud of it since i never healed though i had 300ms ping 
+between 8 and 14.30) but odd end : more was possible...		</div>
+	</div></a>
+</div><br></li><li> Highlight video by Karl Pilkington<br><div class="dynamiclink_box "><a href="https://www.youtube.com/embed/zWEv8Uo6XsE" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_035.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>L4D2 Survival Rooftop 22min&nbsp;</div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 425		</div>
+		<div class="dynamiclink_description">
+			a really nice round, good teamplay and use of items, the bug at the end probably cost us another minute or so		</div>
+	</div></a>
+</div></li></ul>					<div style="clear: both"></div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+			</div>
+
+	<div id="-1">
+	<div class="detailBox">
+<div class="commentthread_area" id="commentthread_PublishedFile_Public_76561198009390365_122543624_0_area">
+	<div class="commentthread_header">
+		<div class="commentthread_count">
+							<span id="commentthread_PublishedFile_Public_76561198009390365_122543624_0_totalcount">15</span> 件のコメント
+					</div>
+		<div style="clear: both;"></div>
+	</div>
+				<form id="commentthread_PublishedFile_Public_76561198009390365_122543624_0_form" name="commentthread_PublishedFile_Public_76561198009390365_122543624_0_form" action="" method="post" onsubmit="return false;">
+
+
+<div class="bb_h1">(*記号)の箇所はMaikoが追加(主にアイテム数の表画像)</div>
+<br>
+<div class="bb_h1">Gator Villageマップでの救急キット再出現の別の説。ƁΘŚŞ ャ№⇨⓵ さんより</div>
+　新たな救急キットが現れるのではなくて、はしけに置かれているピル/アドレナリンが救急キットに変化する。<br>
+それらのアイテムを一度でも動かすと(元の位置に戻らないアイテムです)、もうそれは救急キットに変化しない。<br>
+動かす前に置かれていたスロットにも新たな救急キットは現れない。<br>
+　<br>
+　なので、はしけ上のピル/アドレナリンは取らないようにする。<br>
+時間は一定ではなくて、開始から15～30分後。<br>
+他のマップ、モーテルのAEDルーム、納屋の足場戦略でも起こることがある。<br>
+<br>
+<div class="bb_h1">動画</div>
+<ul class="bb_ul"><li>モーテルAEDルーム by ƁΘŚŞ ャ№⇨⓵<br>
+<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/HJ6chkm_XG4" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_c001.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Motel mysterious kit story </div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 86		</div>
+		<div class="dynamiclink_description">
+			Few weeks ago i noticed that some peoples survival motel stats shown that they used 10 kits.I talked with domino but we don't have any clue.He told that maybe they used a extra kit before the round started by admin menu.
+But Today he figured out the story about the mysterious kits :D		</div>
+	</div></a>
+</div></li></ul>
+
+<ul class="bb_ul"><li>Gator Village木材工場<br>
+<div class="dynamiclink_box "><a href="https://www.youtube.com/embed/vZfAbWld0-Y" target="_blank">
+	<img class="dynamiclink_preview" src="files/1_c002.jpg">
+	<div class="dynamiclink_content">
+		<div class="dynamiclink_name"><span class="dynamiclink_type">YouTube™ の動画: </span>Left 4 Dead 2-Survival-Gator Village 48 min. </div>
+		<div class="dynamiclink_youtubeviews">
+			再生数： 354		</div>
+		<div class="dynamiclink_description">
+			右ベンチ7:50 から 8:20</div>
+	</div></a>
+</div></li></ul>
+
+
+
+
+
+<br>
+<div class="bb_h1">パッシングSurvivor Zombieからアイテムゲット。ƁΘŚŞ ャ№⇨⓵ さんより</div>
+<a href="https://dl.dropboxusercontent.com/u/81745471/L4D/BossSZ/SZ.html" target="_blank">Survivor Zombieの秘密</a><br>
+　これを実行すると池ではなく「プラットホームの上に!」2つくらいのメディキットは普通にゲットできるようです。
+		<div class="commentthread_footer">
+
+			<div style="clear: both;"></div>
+		</div>
+	</div></div> 	</div>
+</div>
+
+</div>
+
+
+<br clear="all">
+<br>
+
+
+<center>
+	<!-- footer -->
+		<div id="footer_spacer"></div>
+	<div id="footer">
+		<div class="footer_content">
+			<span id="footerLogo"><img src="files/footerLogo_valve.png" alt="Valve ロゴ" border="0" height="26" width="96"></span>
+			<span id="footerText">
+				© 2009 Valve Corporation. All rights reserved. 商標はすべて米国およびその他の国の各社が所有します。 この Web サイトで使用されている地域データの一部は <a>geonames.org</a> の提供を受けています。				<br>
+									<span class="valve_links">
+						<a>Privacy Policy</a> | <a>Legal</a> | <a>Steam Subscriber Agreement</a>
+					</span>
+							</span>
+		</div>
+	</div>
+	<!-- /footer -->
+</center>
+
+
+
+<div style="display: none;" class="miniprofile_hover"><div class="shadow_ul"></div><div class="shadow_top"></div><div class="shadow_ur"></div><div class="shadow_left"></div><div class="shadow_right"></div><div class="shadow_bl"></div><div class="shadow_bottom"></div><div class="shadow_br"></div><div class="miniprofile_hover_inner shadow_content"></div><div class="hover_arrow left miniprofile_arrow"><div class="miniprofile_arrow_inner"></div></div><div class="hover_arrow right miniprofile_arrow"><div class="miniprofile_arrow_inner"></div></div></div></body></html>
